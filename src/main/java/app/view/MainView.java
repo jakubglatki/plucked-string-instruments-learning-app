@@ -1,4 +1,4 @@
-package app.ui;
+package app.view;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
