@@ -11,10 +11,12 @@ public class User {
     private String firstName;
     private String lastName;
     private String mail;
-    private char password;
+    private String password;
     private UserType userType;
 
-    public User(String firstName, String lastName, String mail, char password, UserType userType) {
+    public User(){};
+
+    public User(String firstName, String lastName, String mail, String password, UserType userType) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.mail = mail;
@@ -22,7 +24,7 @@ public class User {
         this.userType = userType;
     }
 
-    public User(String mail, char password, UserType userType) {
+    public User(String mail, String password, UserType userType) {
         this.mail = mail;
         this.password = password;
         this.userType = userType;
@@ -60,11 +62,11 @@ public class User {
         this.mail = mail;
     }
 
-    public char getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(char password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 

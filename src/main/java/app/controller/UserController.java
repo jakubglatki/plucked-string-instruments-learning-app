@@ -45,15 +45,15 @@ public class UserController {
     }
 
     @GetMapping("/firstName")
-    public User getUserByFirstName(@RequestParam String firstName) {
-        User user = this.userRepository.findByFirstName(firstName);
+    public List<User> getUserByFirstName(@RequestParam String firstName) {
+        List<User> user = this.userRepository.findByFirstName(firstName);
         return user;
     }
 
 
     @GetMapping("/lastName")
-    public User getUserByLastName(@RequestParam String lastName) {
-        User user = this.userRepository.findByLastName(lastName);
+    public List<User> getUserByLastName(@RequestParam String lastName) {
+        List<User> user = this.userRepository.findByLastName(lastName);
         return user;
     }
 
