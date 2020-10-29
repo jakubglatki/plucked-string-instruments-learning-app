@@ -7,12 +7,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class User {
 
     @Id
-    private String id;
-    private String firstName;
-    private String lastName;
-    private String mail;
-    private String password;
-    private UserType userType;
+    protected String id;
+    protected String firstName;
+    protected String lastName;
+    protected String mail;
+    protected String password;
+    protected UserType userType;
 
     public User(){};
 

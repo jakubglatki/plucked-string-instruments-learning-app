@@ -12,8 +12,6 @@ import java.util.List;
 @Route("elo")
 public class EloView extends VerticalLayout {
     public EloView(){
-
-
         Button elo = new Button("elo");
         elo.addClickListener(e->{
             UI.getCurrent().navigate("");
