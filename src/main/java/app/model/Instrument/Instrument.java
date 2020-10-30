@@ -9,4 +9,8 @@ import java.util.List;
 public class Instrument {
     private String name;
     private List<Chord> chords;
+
+    public Instrument(String name) {
+        this.name = name;
+    }
 }

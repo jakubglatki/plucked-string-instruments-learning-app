@@ -1,5 +1,8 @@
 package app;
 
+import app.model.Group.Group;
+import app.model.Group.GroupRepository;
+import app.model.Instrument.Instrument;
 import app.model.User.Student.Student;
 import app.model.User.Student.StudentRepository;
 import app.model.User.User;
@@ -15,10 +18,12 @@ import java.util.List;
 public class DBSeeder implements CommandLineRunner {
     private app.model.User.UserRepository UserRepository;
     private StudentRepository studentRepository;
+    private GroupRepository groupRepository;
 
-    public DBSeeder(UserRepository UserRepository, StudentRepository studentRepository) {
+    public DBSeeder(UserRepository UserRepository, StudentRepository studentRepository, GroupRepository groupRepository) {
         this.UserRepository = UserRepository;
         this.studentRepository=studentRepository;
+        this.groupRepository=groupRepository;
     }
 
     @Override
@@ -32,8 +37,14 @@ public class DBSeeder implements CommandLineRunner {
 
         Student student=new Student("Pan","Student","student@student.com","studenthasło");
 
+        Instrument ukulele=new Instrument("Ukulele");
+
+        Group group=new Group("Ukuleliści", ukulele, elo);
+
         // drop all Users
         this.UserRepository.deleteAll();
+        this.studentRepository.deleteAll();
+        this.groupRepository.deleteAll();
 
         //add our Users to the database
         List<User> Users = Arrays.asList(elo, noelo, xd);
@@ -41,5 +52,6 @@ public class DBSeeder implements CommandLineRunner {
         this.UserRepository.save(noelo);
         this.UserRepository.save(xd);
         this.studentRepository.save(student);
+        this.groupRepository.save(group);
     }
 }

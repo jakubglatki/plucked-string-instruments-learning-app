@@ -20,4 +20,58 @@ public class Group {
     private User teacher;
     private List<Student> students;
     private List<Date> classesDates;
+
+    public Group(String name, Instrument instrument, User teacher, List<Student> students, List<Date> classesDates) {
+        this.name = name;
+        this.instrument = instrument;
+        this.teacher = teacher;
+        this.students = students;
+        this.classesDates = classesDates;
+    }
+
+    public Group(String name, Instrument instrument, User teacher) {
+        this.name = name;
+        this.instrument = instrument;
+        this.teacher = teacher;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Instrument getInstrument() {
+        return instrument;
+    }
+
+    public void setInstrument(Instrument instrument) {
+        this.instrument = instrument;
+    }
+
+    public User getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(User teacher) {
+        this.teacher = teacher;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
+
+    public List<Date> getClassesDates() {
+        return classesDates;
+    }
+
+    public void setClassesDates(List<Date> classesDates) {
+        this.classesDates = classesDates;
+    }
 }
