@@ -20,7 +20,7 @@ public class MainView extends VerticalLayout {
         List<User> users=userRepository.findByFirstName("Iks");
         click_me.setText(users.get(0).getLastName());
         click_me.addClickListener(e->{
-            UI.getCurrent().navigate("elo");
+            UI.getCurrent().navigate("registration");
         });
         add(click_me);
     }
