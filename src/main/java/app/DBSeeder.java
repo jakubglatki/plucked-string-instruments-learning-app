@@ -41,7 +41,7 @@ public class DBSeeder implements CommandLineRunner {
 
         Group group=new Group("Ukuleliści", ukulele, elo);
 
-        // drop all Users
+/*        // drop all Users
         this.UserRepository.deleteAll();
         this.studentRepository.deleteAll();
         this.groupRepository.deleteAll();
@@ -52,6 +52,6 @@ public class DBSeeder implements CommandLineRunner {
         this.UserRepository.save(noelo);
         this.UserRepository.save(xd);
         this.studentRepository.save(student);
-        this.groupRepository.save(group);
+        this.groupRepository.save(group);*/
     }
 }
