@@ -145,31 +145,40 @@ public class RegistrationView extends VerticalLayout {
 
     private void setSaveButtonListener(Button save) {
         save.addClickListener(event->{
+            infoLabel.setText("");
             if(binder.isValid()) {
                 infoLabel.setText("Registration was successful!");
-                if (this.radioGroup.getValue() != null) {
-                    if (this.radioGroup.getValue().equals("Teacher")) {
-                        teacherBinder.save(new Teacher(firstName.getValue(), lastName.getValue(), email.getValue(), password.getValue()));
-                    } else if (this.radioGroup.getValue().equals("Student")) {
-                        studentBinder.save(new Student(firstName.getValue(), lastName.getValue(), email.getValue(), password.getValue()));
-                    }
-                }
+                addUserData();
+            }
                 else infoLabel.setText("Please choose type of your account (Teacher or Student)");
-            }
-            else{
-                BinderValidationStatus<User> validate = binder.validate();
-                String errorText = validate.getFieldValidationStatuses()
-                        .stream().filter(BindingValidationStatus::isError)
-                        .map(BindingValidationStatus::getMessage)
-                        .map(Optional::get).distinct()
-                        .collect(Collectors.joining(", "));
-                infoLabel.setText("There are errors: " + errorText);
-            }
+
         });
     }
 
+    private void addUserData(){
+        if (this.radioGroup.getValue() != null) {
+            if (this.radioGroup.getValue().equals("Teacher")) {
+                teacherBinder.save(new Teacher(firstName.getValue(), lastName.getValue(), email.getValue(), password.getValue()));
+            } else if (this.radioGroup.getValue().equals("Student")) {
+                studentBinder.save(new Student(firstName.getValue(), lastName.getValue(), email.getValue(), password.getValue()));
+            }
+        }
+        else setErrorMessage();
+    }
+
+    private void setErrorMessage(){
+        BinderValidationStatus<User> validate = binder.validate();
+        String errorText = validate.getFieldValidationStatuses()
+                .stream().filter(BindingValidationStatus::isError)
+                .map(BindingValidationStatus::getMessage)
+                .map(Optional::get).distinct()
+                .collect(Collectors.joining(", "));
+        infoLabel.setText("There are errors: " + errorText);
+    }
+
     private void setResetButtonListener(Button reset) {
-        reset.addClickListener(event-> {
+        reset.addClickListener(event->{
+            infoLabel.setText("");
             firstName.clear();
             lastName.clear();
             email.clear();
@@ -178,8 +187,5 @@ public class RegistrationView extends VerticalLayout {
         });
     }
 
-    private boolean checkData(){
-        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(email.getValue());
-        return matcher.find();
-    }
+
 }
