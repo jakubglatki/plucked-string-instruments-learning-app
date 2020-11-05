@@ -10,6 +10,7 @@ import java.util.List;
 @Document(collection = "Users")
 public class Teacher extends User {
 
+    public Teacher(){}
 
     public Teacher(String firstName, String lastName, String mail, String password) {
         super(firstName, lastName, mail, password, UserType.TEACHER);

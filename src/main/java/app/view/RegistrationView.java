@@ -5,6 +5,8 @@ import app.model.User.Student.StudentRepository;
 import app.model.User.Teacher.Teacher;
 import app.model.User.Teacher.TeacherRepository;
 import app.model.User.User;
+import app.model.User.UserRepository;
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -38,6 +40,8 @@ public class RegistrationView extends VerticalLayout {
     private TeacherRepository teacherBinder;
     @Autowired
     private StudentRepository studentBinder;
+    @Autowired
+    private UserRepository userRepository;
     private Binder<User> binder;
     private TextField firstName;
     private TextField lastName;
@@ -147,23 +151,36 @@ public class RegistrationView extends VerticalLayout {
         save.addClickListener(event->{
             infoLabel.setText("");
             if(binder.isValid()) {
-                infoLabel.setText("Registration was successful!");
-                addUserData();
+                if(checkIfEmailExists()) {
+                    infoLabel.setText("Registration was successful!");
+                    addUserData();
+                }
+                else infoLabel.setText("User with that e-mail address already exists");
             }
-                else infoLabel.setText("Please choose type of your account (Teacher or Student)");
-
+            else setErrorMessage();
         });
+        save.addClickShortcut(Key.ENTER);
+    }
+
+    private boolean checkIfEmailExists(){
+
+        User user = userRepository.findByMail(email.getValue());
+        if(user==null)
+            return true;
+        else
+            return false;
     }
 
     private void addUserData(){
         if (this.radioGroup.getValue() != null) {
+            infoLabel.setText("");
             if (this.radioGroup.getValue().equals("Teacher")) {
                 teacherBinder.save(new Teacher(firstName.getValue(), lastName.getValue(), email.getValue(), password.getValue()));
             } else if (this.radioGroup.getValue().equals("Student")) {
                 studentBinder.save(new Student(firstName.getValue(), lastName.getValue(), email.getValue(), password.getValue()));
             }
         }
-        else setErrorMessage();
+        else  infoLabel.setText("Please choose type of your account (Teacher or Student)");
     }
 
     private void setErrorMessage(){

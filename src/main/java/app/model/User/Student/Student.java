@@ -12,6 +12,8 @@ public class Student extends User {
 
     private List<Grade> grades;
 
+    public Student(){}
+
     public Student(String firstName, String lastName, String mail, String password, List<Grade> grades) {
         super(firstName, lastName, mail, password, UserType.STUDENT);
         this.grades = grades;
