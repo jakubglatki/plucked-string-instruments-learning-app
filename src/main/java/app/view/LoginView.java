@@ -2,26 +2,22 @@ package app.view;
 
 import app.model.User.User;
 import app.model.User.UserRepository;
-import com.mongodb.BasicDBObject;
-import com.mongodb.MongoException;
 import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.flow.component.textfield.PasswordField;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-import java.net.UnknownHostException;
-
-@Route("login")
+@Route(value="login", layout = InternalLayout.class)
 public class LoginView extends VerticalLayout {
 
     private VerticalLayout layout;
@@ -100,6 +96,9 @@ public class LoginView extends VerticalLayout {
         if(user != null) {
             if(user.getPassword().equals(password.getValue())){
                 infoLabel.setText("Your login was successful!");
+                VaadinSession session=VaadinSession.getCurrent();
+                session.setAttribute("user", email.getValue());
+                InternalLayout.loggedIn();
             }
             else infoLabel.setText("Your e-mail or password is incorrect. Please try again");
         }

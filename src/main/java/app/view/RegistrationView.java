@@ -7,7 +7,6 @@ import app.model.User.Teacher.TeacherRepository;
 import app.model.User.User;
 import app.model.User.UserRepository;
 import com.vaadin.flow.component.Key;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -24,14 +23,11 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.awt.*;
 import java.util.Optional;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-@Route("registration")
+@Route(value="registration", layout = InternalLayout.class)
 public class RegistrationView extends VerticalLayout {
 
     private VerticalLayout layout;
@@ -48,8 +44,6 @@ public class RegistrationView extends VerticalLayout {
     private TextField email;
     private PasswordField password;
     private Label infoLabel;
-    public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
-            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     public RegistrationView()
     {
@@ -113,7 +107,7 @@ public class RegistrationView extends VerticalLayout {
 
     private void addButtons(){
         HorizontalLayout buttons = new HorizontalLayout();
-        Button save= new Button("Save");
+        Button save= new Button("Register");
         Button reset =new Button("Clear");
         buttons.add(save,reset);
         setSaveButtonListener(save);
