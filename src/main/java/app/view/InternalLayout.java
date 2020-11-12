@@ -20,46 +20,7 @@ public class InternalLayout extends MainLayout {
     private static MenuItem group;
     private static MenuItem login;
     private static MenuItem registration;
-
-    public MenuBar getMenuBar() {
-        return menuBar;
-    }
-
-    public void setMenuBar(MenuBar menuBar) {
-        this.menuBar = menuBar;
-    }
-
-    public static MenuItem getWelcome() {
-        return welcome;
-    }
-
-    public static void setWelcome(MenuItem welcome) {
-        InternalLayout.welcome = welcome;
-    }
-
-    public static MenuItem getGroup() {
-        return group;
-    }
-
-    public static void setGroup(MenuItem group) {
-        InternalLayout.group = group;
-    }
-
-    public static MenuItem getLogin() {
-        return login;
-    }
-
-    public static void setLogin(MenuItem login) {
-        InternalLayout.login = login;
-    }
-
-    public static MenuItem getRegistration() {
-        return registration;
-    }
-
-    public static void setRegistration(MenuItem registration) {
-        InternalLayout.registration = registration;
-    }
+    private static MenuItem logout;
 
     @Autowired
     private static UserRepository userRepository;
@@ -84,6 +45,13 @@ public class InternalLayout extends MainLayout {
         registration.addClickListener(e->{
             UI.getCurrent().navigate(RegistrationView.class);});
 
+        logout=menuBar.addItem("Logout");
+        logout.setVisible(false);
+        logout.addClickListener(e->{
+            VaadinSession.getCurrent().close();
+            UI.getCurrent().navigate(MainView.class);
+        });
+
         add(menuBar);
     }
 
@@ -91,5 +59,6 @@ public class InternalLayout extends MainLayout {
         UI.getCurrent().navigate(MainView.class);
         login.setVisible(false);
         registration.setVisible(false);
+        logout.setVisible(true);
     }
 }

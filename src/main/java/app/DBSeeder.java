@@ -5,9 +5,12 @@ import app.model.Group.GroupRepository;
 import app.model.Instrument.Instrument;
 import app.model.User.Student.Student;
 import app.model.User.Student.StudentRepository;
+import app.model.User.Teacher.Teacher;
+import app.model.User.Teacher.TeacherRepository;
 import app.model.User.User;
 import app.model.User.UserRepository;
 import app.model.User.UserType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +22,9 @@ public class DBSeeder implements CommandLineRunner {
     private app.model.User.UserRepository UserRepository;
     private StudentRepository studentRepository;
     private GroupRepository groupRepository;
+
+    @Autowired
+    private TeacherRepository teacherRepository;
 
     public DBSeeder(UserRepository UserRepository, StudentRepository studentRepository, GroupRepository groupRepository) {
         this.UserRepository = UserRepository;
@@ -39,8 +45,13 @@ public class DBSeeder implements CommandLineRunner {
 
         Instrument ukulele=new Instrument("Ukulele");
 
-        Group group=new Group("Ukuleliści", ukulele, elo);
+        List<Teacher> teacher=teacherRepository.findByFirstName("Jurgen");
 
+        List<Student> students=studentRepository.findByUserType(UserType.STUDENT);
+
+        Group group=new Group("Ukuleliści", ukulele,teacher.get(0),students);
+
+        //this.groupRepository.save(group);
 /*        // drop all Users
         this.UserRepository.deleteAll();
         this.studentRepository.deleteAll();

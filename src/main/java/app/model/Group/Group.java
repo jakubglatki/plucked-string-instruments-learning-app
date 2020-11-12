@@ -2,6 +2,7 @@ package app.model.Group;
 
 import app.model.Instrument.Instrument;
 import app.model.User.Student.Student;
+import app.model.User.Teacher.Teacher;
 import app.model.User.User;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -33,6 +34,11 @@ public class Group {
         this.name = name;
         this.instrument = instrument;
         this.teacher = teacher;
+    }
+
+    public Group(String name, Instrument instrument, Teacher teacher, List<Student> students){
+        this(name,instrument,teacher);
+        this.students=students;
     }
 
     public String getName() {
