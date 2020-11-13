@@ -7,8 +7,9 @@ import app.model.User.User;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
+import java.util.ArrayList;
 
 
 @Document(collection = "Groups")
@@ -19,10 +20,12 @@ public class Group {
     private String name;
     private Instrument instrument;
     private User teacher;
-    private List<Student> students;
-    private List<Date> classesDates;
+    private ArrayList<Student> students;
+    private ArrayList<String> classesDates;
 
-    public Group(String name, Instrument instrument, User teacher, List<Student> students, List<Date> classesDates) {
+    public Group(){}
+
+    public Group(String name, Instrument instrument, User teacher, ArrayList<Student> students, ArrayList<String> classesDates) {
         this.name = name;
         this.instrument = instrument;
         this.teacher = teacher;
@@ -36,7 +39,7 @@ public class Group {
         this.teacher = teacher;
     }
 
-    public Group(String name, Instrument instrument, Teacher teacher, List<Student> students){
+    public Group(String name, Instrument instrument, Teacher teacher, ArrayList<Student> students){
         this(name,instrument,teacher);
         this.students=students;
     }
@@ -65,19 +68,19 @@ public class Group {
         this.teacher = teacher;
     }
 
-    public List<Student> getStudents() {
+    public ArrayList<Student> getStudents() {
         return students;
     }
 
-    public void setStudents(List<Student> students) {
+    public void setStudents(ArrayList<Student> students) {
         this.students = students;
     }
 
-    public List<Date> getClassesDates() {
+    public ArrayList<String> getClassesDates() {
         return classesDates;
     }
 
-    public void setClassesDates(List<Date> classesDates) {
+    public void setClassesDates(ArrayList<String> classesDates) {
         this.classesDates = classesDates;
     }
 }

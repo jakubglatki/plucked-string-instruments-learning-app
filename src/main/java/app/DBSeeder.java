@@ -1,3 +1,4 @@
+/*
 package app;
 
 import app.model.Group.Group;
@@ -14,8 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.ArrayList;
 
 @Component
 public class DBSeeder implements CommandLineRunner {
@@ -43,26 +47,38 @@ public class DBSeeder implements CommandLineRunner {
 
         Student student=new Student("Pan","Student","student@student.com","studenthasło");
 
-        Instrument ukulele=new Instrument("Ukulele");
+        Instrument guitar=new Instrument("Guitar");
 
-        List<Teacher> teacher=teacherRepository.findByFirstName("Jurgen");
 
-        List<Student> students=studentRepository.findByUserType(UserType.STUDENT);
 
-        Group group=new Group("Ukuleliści", ukulele,teacher.get(0),students);
+        ArrayList<Teacher> teacher=teacherRepository.findByFirstName("Jurgen");
 
-        //this.groupRepository.save(group);
+        ArrayList<Student> students=studentRepository.findByLastName("Henderson");
+        students.add(studentRepository.findByLastName("Keita").get(0));
+        students.add(studentRepository.findByLastName("Milner").get(0));
+
+       Group group=new Group("GuitarM", guitar,teacher.get(0),students);
+
+       String date = "1-12-2020; 18-30";
+        String date1 = "8-12-2020; 18-30";
+        ArrayList<String> dates=new ArrayList();
+        dates.add(date);
+        dates.add(date1);
+        group.setClassesDates(dates);
+        this.groupRepository.save(group);
+*/
 /*        // drop all Users
         this.UserRepository.deleteAll();
         this.studentRepository.deleteAll();
         this.groupRepository.deleteAll();
 
         //add our Users to the database
-        List<User> Users = Arrays.asList(elo, noelo, xd);
+        ArrayList<User> Users = Arrays.asArrayList(elo, noelo, xd);
         this.UserRepository.save(elo);
         this.UserRepository.save(noelo);
         this.UserRepository.save(xd);
         this.studentRepository.save(student);
-        this.groupRepository.save(group);*/
+        this.groupRepository.save(group);*//*
+
     }
-}
+}*/

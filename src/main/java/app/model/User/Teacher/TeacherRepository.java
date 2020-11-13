@@ -3,11 +3,11 @@ package app.model.User.Teacher;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.ArrayList;
 
 @Repository
 public interface TeacherRepository extends MongoRepository<Teacher,String> {
 
-    public List<Teacher> findByFirstName(String firstName);
-    public List<Teacher> findByLastName(String lastName);
+    public ArrayList<Teacher> findByFirstName(String firstName);
+    public ArrayList<Teacher> findByLastName(String lastName);
 }
