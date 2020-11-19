@@ -7,20 +7,13 @@ import app.model.User.User;
 import app.model.User.UserRepository;
 import app.model.User.UserType;
 import com.vaadin.flow.component.AttachEvent;
-import com.vaadin.flow.component.applayout.AppLayout;
-import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.datepicker.DatePicker;
-import com.vaadin.flow.component.datetimepicker.DateTimePicker;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.router.BeforeEvent;
-import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +39,7 @@ public class GroupView extends HorizontalLayout {
 
     public GroupView(){
         infoLabel = new Label();
+        setVerticalComponentAlignment(Alignment.CENTER, infoLabel);
         add(infoLabel);
     }
 
@@ -68,14 +62,12 @@ public class GroupView extends HorizontalLayout {
             user = userRepository.findByMail(session.getAttribute("user").toString());
             if(user.getUserType()==UserType.TEACHER) {
                 usersGroups = groupRepository.findByTeacher(user);
-                infoLabel.setText(usersGroups.get(0).getName());
             }
             else if(user.getUserType()==UserType.STUDENT) {
                 usersGroups = groupRepository.findByStudentsContaining((Student) user);
-               infoLabel.setText(usersGroups.get(0).getInstrument().toString());
             }
         }
-        catch (Exception e){infoLabel.setText(e.toString());}
+        catch (Exception e){infoLabel.setText("Zaloguj się, aby uzyskać dostęp do swoich grup");}
     }
 
     private void addGroupView(Group group) {
@@ -84,13 +76,16 @@ public class GroupView extends HorizontalLayout {
         groupLayout=new VerticalLayout();
         groupLayout.add(nameLayout,teacherLayout);
         groupLayout.addClassName("group-grid");
+        groupLayout.addClickListener(e->{
+            VaadinSession.getCurrent().setAttribute("group", group);
+            UI.getCurrent().navigate(SpecificGroupView.class);});
         add(groupLayout);
     }
 
 
     private void addNameLayout(Group group) {
         nameLayout=new HorizontalLayout();
-        TextField name=new TextField("Name");
+        TextField name=new TextField("Nazwa");
         name.setValue(group.getName());
         TextField instrument=new TextField("Instrument");
         instrument.setValue(group.getInstrument().getName());
@@ -101,10 +96,10 @@ public class GroupView extends HorizontalLayout {
 
     private void addTeachingLayout(Group group) {
         teacherLayout=new HorizontalLayout();
-        TextField teacher=new TextField("Teacher");
-        teacher.setValue(group.getTeacher().getLastName());
+        TextField teacher=new TextField("Nauczyciel");
+        teacher.setValue(group.getTeacher().getFirstName()+" "+group.getTeacher().getLastName());
         DatePicker datePicker=new DatePicker(LocalDate.now());//group.getClassesDates().get(0));
-        datePicker.setLabel("Next class date");
+        datePicker.setLabel("Najbliższa lekcja");
         teacher.setReadOnly(true);
         datePicker.setReadOnly(true);
         teacherLayout.add(teacher,datePicker);

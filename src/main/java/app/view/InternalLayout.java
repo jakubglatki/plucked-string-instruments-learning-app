@@ -27,32 +27,34 @@ public class InternalLayout extends MainLayout {
 
     public InternalLayout() {
         menuBar = new MenuBar();
-        welcome=menuBar.addItem("Welcome");
+        welcome=menuBar.addItem("Start");
         welcome.addClickListener(e->{
             UI.getCurrent().navigate(MainView.class);
         });
 
-        group=menuBar.addItem("Group");
+        group=menuBar.addItem("Grupy");
         group.addClickListener(e->{
             UI.getCurrent().navigate(GroupView.class);
         });
 
-        login=menuBar.addItem("Login");
+        login=menuBar.addItem("Logowanie");
         login.addClickListener(e->{
             UI.getCurrent().navigate(LoginView.class);});
 
-        registration=menuBar.addItem("Registration");
+        registration=menuBar.addItem("Rejestracja");
         registration.addClickListener(e->{
             UI.getCurrent().navigate(RegistrationView.class);});
 
-        logout=menuBar.addItem("Logout");
+        logout=menuBar.addItem("Wyloguj się");
         logout.setVisible(false);
         logout.addClickListener(e->{
-            VaadinSession.getCurrent().close();
             UI.getCurrent().navigate(MainView.class);
+            VaadinSession.getCurrent().close();
         });
 
+        menuBar.setHeight("100px");
         add(menuBar);
+        setDefaultHorizontalComponentAlignment(Alignment.CENTER);
     }
 
     public static void loggedIn(){

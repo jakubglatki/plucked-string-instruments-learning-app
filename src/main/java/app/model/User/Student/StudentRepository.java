@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public interface StudentRepository extends MongoRepository<Student,String> {
 
     public ArrayList<Student> findByFirstName(String firstName);
+
     public ArrayList<Student> findByLastName(String lastName);
     public ArrayList<Student> findByUserType(UserType userType);
 }

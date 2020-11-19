@@ -3,18 +3,20 @@ package app.model.User.Student;
 import app.model.User.Grade.Grade;
 import app.model.User.User;
 import app.model.User.UserType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "Users")
 public class Student extends User {
 
-    private List<Grade> grades;
+    private ArrayList<Grade> grades;
 
     public Student(){}
 
-    public Student(String firstName, String lastName, String mail, String password, List<Grade> grades) {
+    public Student(String firstName, String lastName, String mail, String password, ArrayList<Grade> grades) {
         super(firstName, lastName, mail, password, UserType.STUDENT);
         this.grades = grades;
     }
@@ -27,11 +29,11 @@ public class Student extends User {
         super(firstName, lastName, mail, password, UserType.STUDENT);
     }
 
-    public List<Grade> getGrades() {
+    public ArrayList<Grade> getGrades() {
         return grades;
     }
 
-    public void setGrades(List<Grade> grades) {
+    public void setGrades(ArrayList<Grade> grades) {
         this.grades = grades;
     }
 }

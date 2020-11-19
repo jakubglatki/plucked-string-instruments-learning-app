@@ -21,6 +21,7 @@ import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
@@ -67,12 +68,12 @@ public class RegistrationView extends VerticalLayout {
 
     private void addForms(){
         firstName= new TextField();
-        addTextFieldWithDescription(firstName, "First name");
+        addTextFieldWithDescription(firstName, "Imię");
         firstName.setRequiredIndicatorVisible(true);
 
 
         lastName= new TextField();
-        addTextFieldWithDescription(lastName, "Last name");
+        addTextFieldWithDescription(lastName, "Nazwisko");
         lastName.setRequiredIndicatorVisible(true);
 
         email= new TextField();
@@ -92,7 +93,7 @@ public class RegistrationView extends VerticalLayout {
     {
         password= new PasswordField();
         password.setValueChangeMode(ValueChangeMode.EAGER);
-        password.setLabel("Password");
+        password.setLabel("Hasło");
         password.setRequiredIndicatorVisible(true);
         layout.add(password);
     }
@@ -100,15 +101,15 @@ public class RegistrationView extends VerticalLayout {
 
     private void addRadioButtons() {
         radioGroup = new RadioButtonGroup<>();
-        radioGroup.setLabel("Type of user");
-        radioGroup.setItems("Teacher", "Student");
+        radioGroup.setLabel("Rodzaj użytkownika");
+        radioGroup.setItems("Nauczyciel", "Uczeń");
         layout.add(radioGroup);
     }
 
     private void addButtons(){
         HorizontalLayout buttons = new HorizontalLayout();
-        Button save= new Button("Register");
-        Button reset =new Button("Clear");
+        Button save= new Button("Zarejstruj się");
+        Button reset =new Button("Wyczyść pola");
         buttons.add(save,reset);
         setSaveButtonListener(save);
         setResetButtonListener(reset);
@@ -123,21 +124,21 @@ public class RegistrationView extends VerticalLayout {
     private void addBinders(){
         binder.forField(firstName)
                 .withValidator(new StringLengthValidator(
-                        "Please add the first name", 1, null))
+                        "Dodaj imię", 1, null))
                 .bind(User::getFirstName, User::setFirstName);
 
         binder.forField(lastName)
                 .withValidator(new StringLengthValidator(
-                        "Please add the last name", 1, null))
+                        "Dodaj nazwisko", 1, null))
                 .bind(User::getLastName, User::setLastName);
 
         binder.forField(email)
-                .withValidator(new EmailValidator("Incorrect email address"))
+                .withValidator(new EmailValidator("Nieprawidłowy adres e-mail"))
                 .bind(User::getMail, User::setMail);
 
         binder.forField(password)
                 .withValidator(new StringLengthValidator(
-                        "Please add the password of minimum length of 5", 5, null))
+                        "Dodaj hasło o minimalnej długości 5 znaków", 5, null))
                 .bind(User::getPassword, User::setPassword);
     }
 
@@ -146,10 +147,10 @@ public class RegistrationView extends VerticalLayout {
             infoLabel.setText("");
             if(binder.isValid()) {
                 if(checkIfEmailExists()) {
-                    infoLabel.setText("Registration was successful!");
+                    infoLabel.setText("Rejestracja powiodła się!");
                     addUserData();
                 }
-                else infoLabel.setText("User with that e-mail address already exists");
+                else infoLabel.setText("Użytkownik z takim adresem e-mail już istnieje");
             }
             else setErrorMessage();
         });
@@ -168,13 +169,15 @@ public class RegistrationView extends VerticalLayout {
     private void addUserData(){
         if (this.radioGroup.getValue() != null) {
             infoLabel.setText("");
-            if (this.radioGroup.getValue().equals("Teacher")) {
+            if (this.radioGroup.getValue().equals("Nauczyciel")) {
                 teacherBinder.save(new Teacher(firstName.getValue(), lastName.getValue(), email.getValue(), password.getValue()));
-            } else if (this.radioGroup.getValue().equals("Student")) {
+                setCurrentUser();
+            } else if (this.radioGroup.getValue().equals("Uczeń")) {
                 studentBinder.save(new Student(firstName.getValue(), lastName.getValue(), email.getValue(), password.getValue()));
+                setCurrentUser();
             }
         }
-        else  infoLabel.setText("Please choose type of your account (Teacher or Student)");
+        else  infoLabel.setText("Wybierz rodzaj użytkownika (Nauczyciel lub Uczeń)");
     }
 
     private void setErrorMessage(){
@@ -184,7 +187,7 @@ public class RegistrationView extends VerticalLayout {
                 .map(BindingValidationStatus::getMessage)
                 .map(Optional::get).distinct()
                 .collect(Collectors.joining(", "));
-        infoLabel.setText("There are errors: " + errorText);
+        infoLabel.setText("Występują następujące błędy: " + errorText);
     }
 
     private void setResetButtonListener(Button reset) {
@@ -198,5 +201,10 @@ public class RegistrationView extends VerticalLayout {
         });
     }
 
+    private void setCurrentUser(){
+        VaadinSession session=VaadinSession.getCurrent();
+        session.setAttribute("user", email.getValue());
+        InternalLayout.loggedIn();
+    }
 
 }

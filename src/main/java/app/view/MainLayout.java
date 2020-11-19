@@ -19,7 +19,7 @@ public class MainLayout
     }
 
     public MainLayout() {
-        add(new H1("Plucked String Instrument Learning Application!"));
+
     }
 
 }

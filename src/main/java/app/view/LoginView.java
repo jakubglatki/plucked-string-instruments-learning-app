@@ -53,7 +53,7 @@ public class LoginView extends VerticalLayout {
 
         password=new PasswordField();
         password.setValueChangeMode(ValueChangeMode.EAGER);
-        password.setLabel("Password");
+        password.setLabel("Hasło");
 
         layout.add(email,password);
     }
@@ -62,17 +62,17 @@ public class LoginView extends VerticalLayout {
         binder=new Binder<User>();
 
         binder.forField(email)
-                .withValidator(new EmailValidator("Incorrect email address"))
+                .withValidator(new EmailValidator("Nieprawidłowy adres e-mail"))
                 .bind(User::getMail, User::setMail);
 
         binder.forField(password)
                 .withValidator(new StringLengthValidator(
-                        "Please write your password", 5, null))
+                        "Podaj swoje hasło", 5, null))
                 .bind(User::getPassword, User::setPassword);
     }
 
     private void addButton() {
-        login=new Button("Login");
+        login=new Button("Zaloguj się");
         setLoginButtonListener();
         layout.add(login);
     }
@@ -95,13 +95,13 @@ public class LoginView extends VerticalLayout {
         User user = userRepository.findByMail(email.getValue());
         if(user != null) {
             if(user.getPassword().equals(password.getValue())){
-                infoLabel.setText("Your login was successful!");
+                infoLabel.setText("Logowanie się powiodło!");
                 VaadinSession session=VaadinSession.getCurrent();
                 session.setAttribute("user", email.getValue());
                 InternalLayout.loggedIn();
             }
-            else infoLabel.setText("Your e-mail or password is incorrect. Please try again");
+            else infoLabel.setText("Twój e-mail albo hasło są nieprawidłowe. Spróbuj ponownie");
         }
-        else infoLabel.setText("A user with that e-mail does not exist. Please try again");
+        else infoLabel.setText("Użytkownik z takim adresem e-mail nie istnieje. Spróbuj ponownie");
     }
 }

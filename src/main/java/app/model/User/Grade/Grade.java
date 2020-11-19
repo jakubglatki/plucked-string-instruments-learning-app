@@ -1,10 +1,13 @@
 package app.model.User.Grade;
 
 import app.model.User.Student.Student;
+import app.model.User.Student.StudentRepository;
 import app.model.User.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "Grades")
@@ -17,12 +20,14 @@ public class Grade {
     private int grade;
     private String gradeDescription;
 
+    public Grade(){}
+
     public Grade(Student student, User teacher, int grade) {
         this.student = student;
         this.teacher = teacher;
         this.grade = grade;
 
-        addGradeToStudentsGradeList(student);
+       // addGradeToStudentsGradeList(student);
     }
 
     public Grade(Student student, User teacher, String gradeDescription) {
@@ -31,7 +36,7 @@ public class Grade {
         this.gradeDescription = gradeDescription;
 
 
-        addGradeToStudentsGradeList(student);
+      //  addGradeToStudentsGradeList(student);
     }
 
     public Grade(Student student, User teacher, int grade, String gradeDescription) {
@@ -40,7 +45,7 @@ public class Grade {
         this.grade = grade;
         this.gradeDescription = gradeDescription;
 
-        addGradeToStudentsGradeList(student);
+      //  addGradeToStudentsGradeList(student);
     }
 
     public Student getStudent() {
@@ -76,7 +81,7 @@ public class Grade {
     }
 
     private void addGradeToStudentsGradeList(Student student){
-        List<Grade> gradeList = this.student.getGrades();
+        ArrayList<Grade> gradeList = new ArrayList<>();
         gradeList.add(this);
         this.student.setGrades(gradeList);
     }
