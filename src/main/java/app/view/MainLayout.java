@@ -1,6 +1,7 @@
 package app.view;
 
 import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;

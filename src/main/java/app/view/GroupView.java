@@ -64,7 +64,7 @@ public class GroupView extends HorizontalLayout {
                 usersGroups = groupRepository.findByTeacher(user);
             }
             else if(user.getUserType()==UserType.STUDENT) {
-                usersGroups = groupRepository.findByStudentsContaining((Student) user);
+                usersGroups = groupRepository.findByStudentsMailContaining(user.getMail());
             }
         }
         catch (Exception e){infoLabel.setText("Zaloguj się, aby uzyskać dostęp do swoich grup");}

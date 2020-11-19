@@ -4,6 +4,7 @@ import app.model.Group.Group;
 import app.model.Group.GroupRepository;
 import app.model.User.Grade.Grade;
 import app.model.User.Student.Student;
+import app.model.User.Student.StudentRepository;
 import app.model.User.User;
 import app.model.User.UserRepository;
 import app.model.User.UserType;
@@ -20,11 +21,16 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.textfield.TextField;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
+
 @Route(value="specificGroup", layout = InternalLayout.class)
 public class SpecificGroupView extends VerticalLayout {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private GroupRepository groupRepository;
 
     private Group group;
     private User currentUser;
@@ -35,6 +41,7 @@ public class SpecificGroupView extends VerticalLayout {
     private TextField teacherField;
     private Grid<Student> studentGrid;
     private Button gradesButton;
+    private Grid<Grade> gradeGrid;
 
 
 
@@ -84,22 +91,28 @@ public class SpecificGroupView extends VerticalLayout {
         studentGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES, GridVariant.LUMO_COMPACT);
         studentGrid.setHeightByRows(true);
         add(studentGrid);
-      //  setHorizontalComponentAlignment(Alignment.CENTER, studentGrid);
     }
 
     private void setGradesButton(){
         gradesButton=new Button("Pokaż moje oceny");
         Dialog dialog=new Dialog();
-        Grid<Grade> gradeGrid=new Grid<>();
-        gradeGrid.addColumn(Grade::getGrade).setHeader("Ocena");
-        gradeGrid.addColumn(Grade::getGradeDescription).setHeader("Opis").setWidth("700px");
-        gradeGrid.addColumn(Grade::getTeacher).setHeader("Nauczyciel");
-        dialog.add(gradeGrid);
         dialog.setWidth("1100px");
         gradesButton.addClickListener(e->{
+            addGradesGrid();
+            dialog.add(gradeGrid);
             dialog.open();
         });
         add(gradesButton);
     }
+
+    private void addGradesGrid() {
+        gradeGrid=new Grid<>();
+        Student student= (Student) currentUser;
+        gradeGrid.setItems(student.getGrades());
+        gradeGrid.addColumn(Grade::getGrade).setHeader("Ocena");
+        gradeGrid.addColumn(Grade::getGradeDescription).setHeader("Opis").setWidth("700px");
+        gradeGrid.addColumn(Grade->Grade.getTeacher().getFirstName()+" " +Grade.getTeacher().getLastName()).setHeader("Nauczyciel");
+    }
+
 
 }

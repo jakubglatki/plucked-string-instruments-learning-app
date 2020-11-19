@@ -1,5 +1,6 @@
 /*
 
+
 package app;
 
 import app.model.Group.Group;
@@ -53,28 +54,45 @@ public class DBSeeder implements CommandLineRunner {
 
 
         ArrayList<Teacher> teacher = teacherRepository.findByFirstName("Jurgen");
-
+*/
+/*
         ArrayList<Student> students = studentRepository.findByLastName("Henderson");
         students.add(studentRepository.findByLastName("Keita").get(0));
-        students.add(studentRepository.findByLastName("Milner").get(0));
+        students.add(studentRepository.findByLastName("Milner").get(0));*//*
 
-        Group group = new Group("GuitarM", guitar, teacher.get(0), students);
+
+        ArrayList<Student> students = studentRepository.findByLastName("Salah");
+        students.add(studentRepository.findByLastName("Mane").get(0));
+        students.add(studentRepository.findByLastName("Firmino").get(0));
+        students.add(studentRepository.findByLastName("Jota").get(0));
+
+        Student student1=studentRepository.findByLastName("Firmino").get(0);
+        Grade grade=new Grade(teacher.get(0),5,"Piosenka La La La");
+        ArrayList<Grade> grades=new ArrayList<>();
+        grades.add(grade);
+        student1.setGrades(grades);
+
+        Group group = new Group("Ukuleliści", new Instrument("Ukulele"), teacher.get(0), students);
 
         String date = "1-12-2020; 18-30";
         String date1 = "8-12-2020; 18-30";
         ArrayList<String> dates = new ArrayList();
         dates.add(date);
         dates.add(date1);
-        group.setClassesDates(dates);
-        Student student1=studentRepository.findByLastName("Firmino").get(0);
+        group.setClassesDates(dates);*/
+/*
+        studentRepository.save(student1);
+        try {
+            groupRepository.save(group);
+        }
+        catch (Exception e){System.out.println(e.toString());}*//*
 
-        Grade grade=new Grade(student1, teacher.get(0), 6);
-        Grade grade1=new Grade(student1,teacher.get(0), 5);
-
+        System.out.println(groupRepository.findByStudentsMailContaining("mo@salah.com").get(0).getName());
     }
 }
-
 */
+
+
 
 
 

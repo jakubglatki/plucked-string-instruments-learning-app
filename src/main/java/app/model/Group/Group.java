@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class Group {
 
     @Id
-    private String Id;
+    private String id;
     private String name;
     private Instrument instrument;
     private User teacher;

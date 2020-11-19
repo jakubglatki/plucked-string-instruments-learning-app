@@ -11,4 +11,5 @@ import java.util.ArrayList;
 public interface GroupRepository extends MongoRepository<Group,String> {
     public ArrayList<Group> findByTeacher(User user);
     public ArrayList<Group> findByStudentsContaining(Student student);
+    public ArrayList<Group> findByStudentsMailContaining(String mail);
 }

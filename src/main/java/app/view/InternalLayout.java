@@ -1,16 +1,11 @@
 package app.view;
 
-import app.model.User.User;
 import app.model.User.UserRepository;
-import app.model.User.UserType;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.menubar.MenuBar;
-import com.vaadin.flow.dom.Element;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.annotation.PostConstruct;
 
 public class InternalLayout extends MainLayout {
 

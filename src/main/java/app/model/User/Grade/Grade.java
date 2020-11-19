@@ -22,16 +22,14 @@ public class Grade {
 
     public Grade(){}
 
-    public Grade(Student student, User teacher, int grade) {
-        this.student = student;
+    public Grade(User teacher, int grade) {
         this.teacher = teacher;
         this.grade = grade;
 
        // addGradeToStudentsGradeList(student);
     }
 
-    public Grade(Student student, User teacher, String gradeDescription) {
-        this.student = student;
+    public Grade(User teacher, String gradeDescription) {
         this.teacher = teacher;
         this.gradeDescription = gradeDescription;
 
@@ -39,8 +37,7 @@ public class Grade {
       //  addGradeToStudentsGradeList(student);
     }
 
-    public Grade(Student student, User teacher, int grade, String gradeDescription) {
-        this.student = student;
+    public Grade( User teacher, int grade, String gradeDescription) {
         this.teacher = teacher;
         this.grade = grade;
         this.gradeDescription = gradeDescription;
