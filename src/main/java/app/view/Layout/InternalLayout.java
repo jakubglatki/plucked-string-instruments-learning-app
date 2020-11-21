@@ -1,6 +1,11 @@
-package app.view;
+package app.view.Layout;
 
 import app.model.User.UserRepository;
+import app.view.GroupsView.GroupView;
+import app.view.Layout.MainLayout;
+import app.view.LoginView;
+import app.view.MainView;
+import app.view.RegistrationView;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -17,8 +22,6 @@ public class InternalLayout extends MainLayout {
     private static MenuItem registration;
     private static MenuItem logout;
 
-    @Autowired
-    private static UserRepository userRepository;
 
     public InternalLayout() {
         menuBar = new MenuBar();

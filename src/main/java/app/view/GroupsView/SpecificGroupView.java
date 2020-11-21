@@ -1,12 +1,15 @@
-package app.view;
+package app.view.GroupsView;
 
 import app.model.Group.Group;
 import app.model.Group.GroupRepository;
 import app.model.User.Grade.Grade;
 import app.model.User.Student.Student;
+import app.model.User.Student.StudentRepository;
+import app.model.User.Teacher.Teacher;
 import app.model.User.User;
 import app.model.User.UserRepository;
 import app.model.User.UserType;
+import app.view.Layout.InternalLayout;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -16,8 +19,6 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.provider.DataProvider;
-import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ public class SpecificGroupView extends VerticalLayout {
     @Autowired
     private GroupRepository groupRepository;
 
+    @Autowired
+    private StudentRepository studentRepository;
+
     private Group group;
     private User currentUser;
     private Label infoLabel;
@@ -45,9 +49,10 @@ public class SpecificGroupView extends VerticalLayout {
     private Grid<Student> studentGrid;
     private Button gradesButton;
     private Button studentsGradesButton;
-    private Grid<Grade> gradeGrid;
-
-
+    private Button addGradeButton;
+    private AddGradeView addGradeView;
+    private Dialog dialogGradesView;
+    private Dialog dialogAddGrade;
 
     public SpecificGroupView()
     {
@@ -89,12 +94,15 @@ public class SpecificGroupView extends VerticalLayout {
         studentGrid.setItems(group.getStudents());
         studentGrid.addColumn(Student::getFirstName).setHeader("Imię").setResizable(true);
         studentGrid.addColumn(Student::getLastName).setHeader("Nazwisko").setResizable(true);
-        if(currentUser.getUserType()==UserType.TEACHER)
+        if(currentUser.getUserType()==UserType.TEACHER) {
             setSeeStudentsGradesButton();
+            setAddStudentsGradesButton();
+        }
         studentGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES, GridVariant.LUMO_COMPACT);
         studentGrid.setHeightByRows(true);
         add(studentGrid);
     }
+
 
     private void setSeeStudentsGradesButton() {
         Collection<Button> seeGradesButtons= Collections.newSetFromMap(new WeakHashMap<>());
@@ -108,6 +116,14 @@ public class SpecificGroupView extends VerticalLayout {
         });
     }
 
+    private void setAddStudentsGradesButton() {
+        Collection<Button> addGradesButtons= Collections.newSetFromMap(new WeakHashMap<>());
+        studentGrid.addComponentColumn(student->{
+            setAddGradeButton(student);
+            addGradesButtons.add(addGradeButton);
+            return addGradeButton;
+        });
+    }
 
     private void setGradesButton(){
         gradesButton=new Button("Pokaż moje oceny");
@@ -118,20 +134,27 @@ public class SpecificGroupView extends VerticalLayout {
     }
 
     private void showGradesClickListener(Student student) {
-        addGradesGrid(student);
-        Dialog dialog=new Dialog();
-        dialog.setWidth("1100px");
-        dialog.add(gradeGrid);
-        dialog.open();
+        dialogGradesView=new Dialog();
+        GradesView gradesView=new GradesView(student);
+        dialogGradesView.setWidth("1100px");
+        dialogGradesView.add(gradesView.getGradeGrid());
+        if(currentUser.getUserType()==UserType.TEACHER) {
+            setAddGradeButton(student);
+            dialogGradesView.add(addGradeButton);
+        }
+        dialogGradesView.open();
     }
 
-    private void addGradesGrid(Student student) {
-        gradeGrid=new Grid<>();
-        if(student.getGrades()!=null)
-            gradeGrid.setItems(student.getGrades());
-        gradeGrid.addColumn(Grade::getGrade).setHeader("Ocena");
-        gradeGrid.addColumn(Grade::getGradeDescription).setHeader("Opis").setWidth("700px");
-        gradeGrid.addColumn(Grade->Grade.getTeacher().getFirstName()+" " +Grade.getTeacher().getLastName()).setHeader("Nauczyciel");
-        gradeGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES, GridVariant.LUMO_COMPACT);
+    private void setAddGradeButton(Student student) {
+        addGradeButton=new Button("Dodaj ocenę");
+        addGradeButton.addClickListener(event -> {
+            if(dialogGradesView!=null && dialogGradesView.isOpened())
+                dialogGradesView.close();
+            dialogAddGrade= new Dialog();
+            addGradeView=new AddGradeView(student,(Teacher)currentUser, group, studentRepository, groupRepository,dialogAddGrade);
+            dialogAddGrade.add(addGradeView);
+            dialogAddGrade.open();
+        });
     }
+
 }

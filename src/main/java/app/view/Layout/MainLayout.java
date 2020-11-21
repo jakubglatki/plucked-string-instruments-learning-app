@@ -1,4 +1,4 @@
-package app.view;
+package app.view.Layout;
 
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.dependency.CssImport;

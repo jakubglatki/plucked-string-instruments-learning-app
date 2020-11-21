@@ -36,4 +36,14 @@ public class Student extends User {
     public void setGrades(ArrayList<Grade> grades) {
         this.grades = grades;
     }
+
+    public void addGrade(Grade grade){
+        ArrayList<Grade> gradesList=new ArrayList<>();
+        if(this.getGrades()!=null)
+            gradesList=this.getGrades();
+
+        gradesList.add(grade);
+
+        setGrades(gradesList);
+    }
 }

@@ -6,6 +6,7 @@ import app.model.User.Teacher.Teacher;
 import app.model.User.Teacher.TeacherRepository;
 import app.model.User.User;
 import app.model.User.UserRepository;
+import app.view.Layout.InternalLayout;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -25,7 +26,6 @@ import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Route(value="registration", layout = InternalLayout.class)

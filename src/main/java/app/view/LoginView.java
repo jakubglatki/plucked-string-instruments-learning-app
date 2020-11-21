@@ -2,8 +2,8 @@ package app.view;
 
 import app.model.User.User;
 import app.model.User.UserRepository;
+import app.view.Layout.InternalLayout;
 import com.vaadin.flow.component.Key;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;

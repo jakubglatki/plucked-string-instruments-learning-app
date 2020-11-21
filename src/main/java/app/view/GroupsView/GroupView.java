@@ -1,11 +1,11 @@
-package app.view;
+package app.view.GroupsView;
 
 import app.model.Group.Group;
 import app.model.Group.GroupRepository;
-import app.model.User.Student.Student;
 import app.model.User.User;
 import app.model.User.UserRepository;
 import app.model.User.UserType;
+import app.view.Layout.InternalLayout;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.datepicker.DatePicker;
