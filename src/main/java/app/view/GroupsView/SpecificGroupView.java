@@ -50,9 +50,11 @@ public class SpecificGroupView extends VerticalLayout {
     private Button gradesButton;
     private Button studentsGradesButton;
     private Button addGradeButton;
+    private Button addStudentsButton;
     private AddGradeView addGradeView;
     private Dialog dialogGradesView;
     private Dialog dialogAddGrade;
+    private Dialog dialogAddStudents;
 
     public SpecificGroupView()
     {
@@ -69,6 +71,8 @@ public class SpecificGroupView extends VerticalLayout {
             setStudentGrid();
             if(currentUser.getUserType()==UserType.STUDENT)
                 setGradesButton();
+            if(currentUser.getUserType()==UserType.TEACHER)
+                setAddStudentsButton();
         }
         catch (Exception e){infoLabel.setText("Zaloguj się, aby uzyskać dostęp do swoich grup");}
     }
@@ -151,10 +155,24 @@ public class SpecificGroupView extends VerticalLayout {
             if(dialogGradesView!=null && dialogGradesView.isOpened())
                 dialogGradesView.close();
             dialogAddGrade= new Dialog();
-            addGradeView=new AddGradeView(student,(Teacher)currentUser, group, studentRepository, groupRepository,dialogAddGrade);
+            addGradeView=new AddGradeView(student,(Teacher)currentUser, group, studentRepository, groupRepository, dialogAddGrade);
             dialogAddGrade.add(addGradeView);
             dialogAddGrade.open();
         });
     }
 
+    private void setAddStudentsButton(){
+        dialogGradesView=new Dialog();
+        dialogGradesView.setWidth("1100px");
+        dialogGradesView.addOpenedChangeListener(dialogOpenedChangeEvent -> {
+            studentGrid.getDataProvider().refreshAll();
+        });
+        addStudentsButton=new Button("Dodaj uczniów");
+        addStudentsButton.addClickListener(e->{
+            AddStudentsView addStudentsView=new AddStudentsView(group, dialogGradesView, groupRepository, studentRepository);
+            dialogGradesView.add(addStudentsView.getLayout());
+            dialogGradesView.open();
+        });
+        add(addStudentsButton);
+    }
 }

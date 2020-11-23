@@ -6,11 +6,9 @@ import app.model.User.Grade.Grade;
 import app.model.User.Student.Student;
 import app.model.User.Student.StudentRepository;
 import app.model.User.Teacher.Teacher;
-import app.model.User.User;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -19,8 +17,6 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.IntegerRangeValidator;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.xml.validation.Validator;
 
 
 public class AddGradeView extends VerticalLayout {
