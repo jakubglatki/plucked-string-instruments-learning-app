@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 
-public class AddStudentsView extends VerticalLayout {
+public class EditStudentsView extends VerticalLayout {
 
     private StudentRepository studentRepository;
     private GroupRepository groupRepository;
@@ -25,31 +25,37 @@ public class AddStudentsView extends VerticalLayout {
     private GroupController groupController;
     private Grid<Student> studentsGrid;
     private Button addButton;
+    private Button removeButton;
     private Button cancelButton;
     private HorizontalLayout buttonLayout;
     private VerticalLayout layout;
     private Group group;
     private Dialog dialog;
     private boolean isItNewGroup;
+    private boolean isItAdd;
 
     public VerticalLayout getLayout() {
         return layout;
     }
 
-    public AddStudentsView(Group group, Dialog dialog, GroupRepository groupRepository, StudentRepository studentRepository){
+    public EditStudentsView(Group group, Dialog dialog, GroupRepository groupRepository, StudentRepository studentRepository, boolean isItNewGroup, boolean isItAdd){
         this.group=group;
         this.dialog=dialog;
         this.groupRepository=groupRepository;
         this.studentRepository=studentRepository;
+        this.isItNewGroup=isItNewGroup;
+        this.isItAdd=isItAdd;
         this.groupController=new GroupController();
         this.buttonLayout=new HorizontalLayout();
         setGrid();
         setAddButton();
+        setRemoveButton();
         setCloseButton();
         add(buttonLayout);
         layout=new VerticalLayout();
         layout.add(studentsGrid,buttonLayout);
     }
+
 
     private void setAddButton() {
         addButton=new Button("Dodaj");
@@ -58,7 +64,8 @@ public class AddStudentsView extends VerticalLayout {
             addStudents();
             dialog.close();
         });
-        buttonLayout.add(addButton);
+        if(isItAdd==true)
+            buttonLayout.add(addButton);
     }
 
     private void addStudents() {
@@ -67,6 +74,25 @@ public class AddStudentsView extends VerticalLayout {
         group=groupController.addStudentsToGroup(group,students);
         groupRepository.save(group);
     }
+
+    private void setRemoveButton() {
+        removeButton=new Button("Usuń");
+        removeButton.addClickShortcut(Key.ENTER);
+        removeButton.addClickListener(event -> {
+            removeStudents();
+            dialog.close();
+        });
+        if(isItAdd==false)
+            buttonLayout.add(removeButton);
+    }
+
+    private void removeStudents() {
+        ArrayList<Student> students=new ArrayList<>();
+        students.addAll(studentsGrid.getSelectedItems());
+        group=groupController.deleteStudentsFromGroup(group, students);
+        groupRepository.save(group);
+    }
+
 
     private void setCloseButton() {
         cancelButton=new Button("Anuluj");
@@ -79,7 +105,11 @@ public class AddStudentsView extends VerticalLayout {
 
     private void setGrid() {
         studentsGrid=new Grid<>();
-        ArrayList<Student> students= setStudentsList();
+        ArrayList<Student> students;
+        if(isItAdd==true)
+            students= setStudentsListForAdding();
+        else
+            students=group.getStudents();
         studentsGrid.setItems(students);
         studentsGrid.setSelectionMode(Grid.SelectionMode.MULTI);
         studentsGrid.addColumn(Student::getFirstName).setHeader("Imię");
@@ -90,7 +120,8 @@ public class AddStudentsView extends VerticalLayout {
         add(studentsGrid);
     }
 
-    private ArrayList<Student> setStudentsList() {
+
+    private ArrayList<Student> setStudentsListForAdding() {
         ArrayList<Student> students;
         ArrayList<Student> groupStudents;
         ArrayList<Student> studentsToReturn;
@@ -108,4 +139,5 @@ public class AddStudentsView extends VerticalLayout {
         }
         return studentsToReturn;
     }
+
 }

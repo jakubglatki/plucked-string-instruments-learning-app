@@ -21,4 +21,16 @@ public class GroupController {
         group.setStudents(groupsStudents);
         return group;
     }
+
+    public Group deleteStudentsFromGroup(Group group, ArrayList<Student> students){
+        ArrayList<Student> groupStudents= (ArrayList<Student>) group.getStudents().clone();
+        for(int i=0;i<groupStudents.size();i++){
+            for(Student student: students){
+                if(groupStudents.get(i).getMail().contains(student.getMail()))
+                    groupStudents.remove(student);
+            }
+        }
+        group.setStudents(groupStudents);
+        return group;
+    }
 }

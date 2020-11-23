@@ -1,8 +1,8 @@
 package app.view.GroupsView;
 
+import app.controller.GroupController;
 import app.model.Group.Group;
 import app.model.Group.GroupRepository;
-import app.model.User.Grade.Grade;
 import app.model.User.Student.Student;
 import app.model.User.Student.StudentRepository;
 import app.model.User.Teacher.Teacher;
@@ -12,6 +12,7 @@ import app.model.User.UserType;
 import app.view.Layout.InternalLayout;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
@@ -43,6 +44,7 @@ public class SpecificGroupView extends VerticalLayout {
     private User currentUser;
     private Label infoLabel;
     private HorizontalLayout infoLayout;
+    private HorizontalLayout buttonLayout;
     private TextField nameField;
     private TextField instrumentField;
     private TextField teacherField;
@@ -51,10 +53,11 @@ public class SpecificGroupView extends VerticalLayout {
     private Button studentsGradesButton;
     private Button addGradeButton;
     private Button addStudentsButton;
+    private Button removeStudentsButton;
     private AddGradeView addGradeView;
     private Dialog dialogGradesView;
     private Dialog dialogAddGrade;
-    private Dialog dialogAddStudents;
+    private Dialog dialogEditStudents;
 
     public SpecificGroupView()
     {
@@ -71,8 +74,12 @@ public class SpecificGroupView extends VerticalLayout {
             setStudentGrid();
             if(currentUser.getUserType()==UserType.STUDENT)
                 setGradesButton();
-            if(currentUser.getUserType()==UserType.TEACHER)
+            if(currentUser.getUserType()==UserType.TEACHER) {
+                buttonLayout=new HorizontalLayout();
                 setAddStudentsButton();
+                setRemoveStudentsButton();
+                add(buttonLayout);
+            }
         }
         catch (Exception e){infoLabel.setText("Zaloguj się, aby uzyskać dostęp do swoich grup");}
     }
@@ -162,17 +169,43 @@ public class SpecificGroupView extends VerticalLayout {
     }
 
     private void setAddStudentsButton(){
-        dialogGradesView=new Dialog();
-        dialogGradesView.setWidth("1100px");
-        dialogGradesView.addOpenedChangeListener(dialogOpenedChangeEvent -> {
-            studentGrid.getDataProvider().refreshAll();
-        });
+        setEditStudentsDialog(true);
         addStudentsButton=new Button("Dodaj uczniów");
+        addStudentsButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         addStudentsButton.addClickListener(e->{
-            AddStudentsView addStudentsView=new AddStudentsView(group, dialogGradesView, groupRepository, studentRepository);
-            dialogGradesView.add(addStudentsView.getLayout());
-            dialogGradesView.open();
+            EditStudentsView editStudentsView =new EditStudentsView(group, dialogEditStudents, groupRepository, studentRepository, false, true);
+            dialogEditStudents.removeAll();
+            dialogEditStudents.add(editStudentsView.getLayout());
+            dialogEditStudents.open();
         });
-        add(addStudentsButton);
+        buttonLayout.add(addStudentsButton);
+    }
+
+    private void setEditStudentsDialog(Boolean isItAdd) {
+        dialogEditStudents=new Dialog();
+        dialogEditStudents.setWidth("1100px");
+        dialogEditStudents.addOpenedChangeListener(dialogOpenedChangeEvent -> {
+            if(isItAdd)
+                studentGrid.getDataProvider().refreshAll();
+            else if(!isItAdd)
+            {
+                this.remove(studentGrid, buttonLayout);
+                setStudentGrid();
+                this.add(buttonLayout);
+            }
+        });
+    }
+
+    private void setRemoveStudentsButton(){
+        setEditStudentsDialog(false);
+        removeStudentsButton=new Button("Usuń uczniów");
+        removeStudentsButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        removeStudentsButton.addClickListener(event -> {
+            EditStudentsView editStudentsView= new EditStudentsView(group,dialogEditStudents, groupRepository, studentRepository, false, false);
+            dialogEditStudents.removeAll();
+            dialogEditStudents.add(editStudentsView.getLayout());
+            dialogEditStudents.open();
+        });
+        buttonLayout.add(removeStudentsButton);
     }
 }
