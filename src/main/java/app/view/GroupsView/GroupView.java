@@ -2,14 +2,19 @@ package app.view.GroupsView;
 
 import app.model.Group.Group;
 import app.model.Group.GroupRepository;
+import app.model.Instrument.InstrumentRepository;
+import app.model.User.Student.StudentRepository;
+import app.model.User.Teacher.Teacher;
 import app.model.User.User;
 import app.model.User.UserRepository;
 import app.model.User.UserType;
 import app.view.Layout.InternalLayout;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -26,9 +31,13 @@ import java.util.ArrayList;
 public class GroupView extends VerticalLayout {
 
     @Autowired
+    private StudentRepository studentRepository;
+    @Autowired
     private UserRepository userRepository;
     @Autowired
     private GroupRepository groupRepository;
+    @Autowired
+    private InstrumentRepository instrumentRepository;
 
     private User user;
     private ArrayList<Group> usersGroups;
@@ -38,6 +47,8 @@ public class GroupView extends VerticalLayout {
     private VerticalLayout groupLayout;
     private HorizontalLayout nameLayout;
     private HorizontalLayout teacherLayout;
+    private Dialog addGroupDialog;
+    private Button addGroupButton;
 
     public GroupView(){
         infoLabel = new Label();
@@ -73,6 +84,7 @@ public class GroupView extends VerticalLayout {
             user = userRepository.findByMail(session.getAttribute("user").toString());
             if(user.getUserType()==UserType.TEACHER) {
                 usersGroups = groupRepository.findByTeacher(user);
+                setAddGroupButton();
             }
             else if(user.getUserType()==UserType.STUDENT) {
                 usersGroups = groupRepository.findByStudentsMailContaining(user.getMail());
@@ -81,6 +93,23 @@ public class GroupView extends VerticalLayout {
         catch (Exception e){infoLabel.setText("Zaloguj się, aby uzyskać dostęp do swoich grup");}
     }
 
+    private void setAddGroupButton() {
+        addGroupButton=new Button("Dodaj grupę");
+        addGroupDialog=new Dialog();
+        addGroupButton.addClickListener(event -> {
+            Dialog dialog=new Dialog();
+            dialog.setWidth("1000px");
+            dialog.addDetachListener(dialogOpenedChangeEvent->{
+                UI.getCurrent().getPage().reload();
+            });
+            AddGroupView addAddGroupView= new AddGroupView((Teacher) user, dialog, studentRepository, groupRepository, instrumentRepository);
+            dialog.add(addAddGroupView);
+            dialog.open();
+        });
+        add(addGroupButton);
+    }
+
+    //Group layouts are grouped as two, and "i" says if it's first or second
     private void addGroupView(Group group, int i) {
         addNameLayout(group);
         addTeachingLayout(group);
