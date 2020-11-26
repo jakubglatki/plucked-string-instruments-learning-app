@@ -1,6 +1,7 @@
 package app.controller;
 
 import app.model.Group.Group;
+import app.model.User.Grade.Grade;
 import app.model.User.Student.Student;
 import app.model.User.Student.StudentRepository;
 import app.model.User.UserType;
@@ -30,5 +31,16 @@ public class StudentController  {
             }
         }
         return studentsToReturn;
+    }
+
+
+    public void addGrade(Grade grade, Student student){
+        ArrayList<Grade> gradesList=new ArrayList<>();
+        if(student.getGrades()!=null)
+            gradesList=student.getGrades();
+
+        gradesList.add(grade);
+
+        student.setGrades(gradesList);
     }
 }

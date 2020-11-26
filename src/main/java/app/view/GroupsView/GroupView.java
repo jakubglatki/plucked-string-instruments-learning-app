@@ -58,6 +58,8 @@ public class GroupView extends VerticalLayout {
                 if(i>1)
                     i=0;
             }
+            if(usersGroups.size()%2==1)
+                allGroupsLayout.add(twoGroupsLayout);
             this.add(allGroupsLayout);
         }
         catch (Exception e){}

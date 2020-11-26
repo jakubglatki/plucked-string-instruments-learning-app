@@ -33,4 +33,18 @@ public class GroupController {
         group.setStudents(groupStudents);
         return group;
     }
+
+    public Group editStudentInGroup(Group group, Student student){
+        int index=0;
+        int i=0;
+        ArrayList<Student> students=group.getStudents();
+        for(Student groupStudent: students){
+            if(student.getMail()==groupStudent.getMail())
+                index=i;
+            i++;
+        }
+        students.set(index, student);
+        group.setStudents(students);
+        return group;
+    }
 }

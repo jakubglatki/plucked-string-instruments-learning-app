@@ -1,5 +1,6 @@
 package app.view.GroupsView;
 
+import app.controller.StudentController;
 import app.model.Group.Group;
 import app.model.Group.GroupRepository;
 import app.model.User.Grade.Grade;
@@ -91,8 +92,9 @@ public class AddGradeView extends VerticalLayout {
         });
     }
     private void addGrade() {
-        if(!this.gradeField.getValue().equals(null) && !this.descriptionField.getValue().isBlank()) {
-            student.addGrade(new Grade(teacher, gradeField.getValue(), descriptionField.getValue()));
+        if(this.gradeField.getValue() != null && !this.descriptionField.getValue().isBlank()) {
+            StudentController studentController= new StudentController();
+            studentController.addGrade(new Grade(teacher, gradeField.getValue(), descriptionField.getValue()), student);
             groupRepository.save(group);
             studentRepository.save(student);
         }

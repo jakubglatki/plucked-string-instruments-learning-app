@@ -146,7 +146,11 @@ public class SpecificGroupView extends VerticalLayout {
 
     private void showGradesClickListener(Student student) {
         dialogGradesView=new Dialog();
-        GradesView gradesView=new GradesView(student);
+        GradesView gradesView;
+        if(currentUser.getUserType()==UserType.TEACHER)
+            gradesView=new GradesView(student, (Teacher) currentUser, group, groupRepository, studentRepository);
+        else
+            gradesView=new GradesView(student);
         dialogGradesView.setWidth("1100px");
         dialogGradesView.add(gradesView.getGradeGrid());
         if(currentUser.getUserType()==UserType.TEACHER) {
