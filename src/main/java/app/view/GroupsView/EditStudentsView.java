@@ -1,6 +1,7 @@
 package app.view.GroupsView;
 
 import app.controller.GroupController;
+import app.controller.StudentController;
 import app.model.Group.Group;
 import app.model.Group.GroupRepository;
 import app.model.User.Student.Student;
@@ -23,6 +24,7 @@ public class EditStudentsView extends VerticalLayout {
     private GroupRepository groupRepository;
 
     private GroupController groupController;
+    private StudentController studentController;
     private Grid<Student> studentsGrid;
     private Button addButton;
     private Button removeButton;
@@ -46,6 +48,7 @@ public class EditStudentsView extends VerticalLayout {
         this.isItNewGroup=isItNewGroup;
         this.isItAdd=isItAdd;
         this.groupController=new GroupController();
+        this.studentController=new StudentController();
         this.buttonLayout=new HorizontalLayout();
         setGrid();
         setAddButton();
@@ -107,7 +110,7 @@ public class EditStudentsView extends VerticalLayout {
         studentsGrid=new Grid<>();
         ArrayList<Student> students;
         if(isItAdd==true)
-            students= setStudentsListForAdding();
+            students= studentController.setStudentsListForAdding(group, studentRepository);
         else
             students=group.getStudents();
         studentsGrid.setItems(students);
@@ -121,23 +124,6 @@ public class EditStudentsView extends VerticalLayout {
     }
 
 
-    private ArrayList<Student> setStudentsListForAdding() {
-        ArrayList<Student> students;
-        ArrayList<Student> groupStudents;
-        ArrayList<Student> studentsToReturn;
-        groupStudents=group.getStudents();
-        students= studentRepository.findByUserType(UserType.STUDENT);
-        studentsToReturn= (ArrayList<Student>) students.clone();
-        for (int i=0;i<groupStudents.size();i++) {
-            if(groupStudents!=null) {
-                for(Student student:students){
-                    if(groupStudents.get(i).getMail().contains(student.getMail())){
-                        studentsToReturn.remove(student);
-                    }
-                }
-            }
-        }
-        return studentsToReturn;
-    }
+
 
 }

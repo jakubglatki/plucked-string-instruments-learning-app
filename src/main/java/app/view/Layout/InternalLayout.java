@@ -1,19 +1,17 @@
 package app.view.Layout;
 
-import app.model.User.UserRepository;
 import app.view.GroupsView.GroupView;
-import app.view.Layout.MainLayout;
 import app.view.LoginView;
 import app.view.MainView;
 import app.view.RegistrationView;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.menubar.MenuBar;
+import com.vaadin.flow.router.PreserveOnRefresh;
+import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinSession;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class InternalLayout extends MainLayout {
-
 
     private  MenuBar menuBar;
     private static MenuItem welcome;
@@ -44,15 +42,28 @@ public class InternalLayout extends MainLayout {
             UI.getCurrent().navigate(RegistrationView.class);});
 
         logout=menuBar.addItem("Wyloguj się");
-        logout.setVisible(false);
         logout.addClickListener(e->{
             UI.getCurrent().navigate(MainView.class);
             VaadinSession.getCurrent().close();
         });
 
+        setLoginLogoutVisibility();
         menuBar.setHeight("100px");
         add(menuBar);
         setDefaultHorizontalComponentAlignment(Alignment.CENTER);
+    }
+
+    private void setLoginLogoutVisibility() {
+            Object value = VaadinSession.getCurrent().getAttribute("user");
+            if (value==null) {
+                login.setVisible(true);
+                registration.setVisible(true);
+                logout.setVisible(false);
+            } else {
+                login.setVisible(false);
+                registration.setVisible(false);
+                logout.setVisible(true);
+            }
     }
 
     public static void loggedIn(){

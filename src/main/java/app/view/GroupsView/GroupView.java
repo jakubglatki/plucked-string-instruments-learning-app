@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 @Route(value="group", layout = InternalLayout.class)
 @CssImport("./styles/shared-styles.css")
-public class GroupView extends HorizontalLayout {
+public class GroupView extends VerticalLayout {
 
     @Autowired
     private UserRepository userRepository;
@@ -33,13 +33,15 @@ public class GroupView extends HorizontalLayout {
     private User user;
     private ArrayList<Group> usersGroups;
     private Label infoLabel;
+    private VerticalLayout allGroupsLayout;
+    private HorizontalLayout twoGroupsLayout;
     private VerticalLayout groupLayout;
     private HorizontalLayout nameLayout;
     private HorizontalLayout teacherLayout;
 
     public GroupView(){
         infoLabel = new Label();
-        setVerticalComponentAlignment(Alignment.CENTER, infoLabel);
+        setDefaultHorizontalComponentAlignment(Alignment.CENTER);
         add(infoLabel);
     }
 
@@ -47,9 +49,16 @@ public class GroupView extends HorizontalLayout {
     public void onAttach(AttachEvent event){
         try {
             defineGroupsList();
+            allGroupsLayout=new VerticalLayout();
+            allGroupsLayout.setDefaultHorizontalComponentAlignment(Alignment.CENTER);
+            int i=0;
             for (Group group : usersGroups) {
-                addGroupView(group);
+                addGroupView(group, i);
+                i++;
+                if(i>1)
+                    i=0;
             }
+            this.add(allGroupsLayout);
         }
         catch (Exception e){}
     }
@@ -70,7 +79,7 @@ public class GroupView extends HorizontalLayout {
         catch (Exception e){infoLabel.setText("Zaloguj się, aby uzyskać dostęp do swoich grup");}
     }
 
-    private void addGroupView(Group group) {
+    private void addGroupView(Group group, int i) {
         addNameLayout(group);
         addTeachingLayout(group);
         groupLayout=new VerticalLayout();
@@ -79,7 +88,20 @@ public class GroupView extends HorizontalLayout {
         groupLayout.addClickListener(e->{
             VaadinSession.getCurrent().setAttribute("group", group);
             UI.getCurrent().navigate(SpecificGroupView.class);});
-        add(groupLayout);
+        if(i==0)
+            makeNewTwoGroupsLayout(groupLayout);
+        else
+            addToTwoGroupsLayout(groupLayout);
+    }
+
+    private void makeNewTwoGroupsLayout(VerticalLayout groupLayout) {
+        twoGroupsLayout=new HorizontalLayout();
+        twoGroupsLayout.add(groupLayout);
+    }
+
+    private void addToTwoGroupsLayout(VerticalLayout groupLayout) {
+        twoGroupsLayout.add(groupLayout);
+        allGroupsLayout.add(twoGroupsLayout);
     }
 
 

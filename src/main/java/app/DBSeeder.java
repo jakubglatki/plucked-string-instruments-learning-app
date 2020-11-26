@@ -6,6 +6,7 @@ package app;
 import app.model.Group.Group;
 import app.model.Group.GroupRepository;
 import app.model.Instrument.Instrument;
+import app.model.Instrument.InstrumentRepository;
 import app.model.User.Grade.Grade;
 import app.model.User.Student.Student;
 import app.model.User.Student.StudentRepository;
@@ -33,6 +34,9 @@ public class DBSeeder implements CommandLineRunner {
     @Autowired
     private TeacherRepository teacherRepository;
 
+    @Autowired
+    private InstrumentRepository instrumentRepository;
+
     public DBSeeder(UserRepository UserRepository, StudentRepository studentRepository, GroupRepository groupRepository) {
         this.UserRepository = UserRepository;
         this.studentRepository = studentRepository;
@@ -50,16 +54,15 @@ public class DBSeeder implements CommandLineRunner {
 
         Student student = new Student("Pan", "Student", "student@student.com", "studenthasło");
 
-        Instrument guitar = new Instrument("Guitar");
+        //Instrument guitar = new Instrument("Guitar");
 
 
         ArrayList<Teacher> teacher = teacherRepository.findByFirstName("Jurgen");
-*/
-/*
         ArrayList<Student> students = studentRepository.findByLastName("Henderson");
         students.add(studentRepository.findByLastName("Keita").get(0));
-        students.add(studentRepository.findByLastName("Milner").get(0));*//*
-
+        students.add(studentRepository.findByLastName("Milner").get(0));
+*/
+/*
 
         ArrayList<Student> students = studentRepository.findByLastName("Salah");
         students.add(studentRepository.findByLastName("Mane").get(0));
@@ -79,19 +82,24 @@ public class DBSeeder implements CommandLineRunner {
         ArrayList<String> dates = new ArrayList();
         dates.add(date);
         dates.add(date1);
-        group.setClassesDates(dates);*/
-/*
+        group.setClassesDates(dates);
         studentRepository.save(student1);
         try {
             groupRepository.save(group);
         }
-        catch (Exception e){System.out.println(e.toString());}*//*
+        catch (Exception e){System.out.println(e.toString());}
 
-        System.out.println(groupRepository.findByStudentsMailContaining("mo@salah.com").get(0).getName());
+        System.out.println(groupRepository.findByStudentsMailContaining("mo@salah.com").get(0).getName());*//*
+
+
+        Instrument ukulele=new Instrument("Ukulele");
+        Instrument guitar= new Instrument("Guitar");
+        instrumentRepository.save(guitar);
+        instrumentRepository.save(ukulele);
     }
 }
-*/
 
+*/
 
 
 
