@@ -47,4 +47,20 @@ public class GroupController {
         group.setStudents(students);
         return group;
     }
+
+    //it's necessary to show student's grade, that are in given group
+    public int getStudentIndex(Group group, Student student){
+        ArrayList<Student> students= new ArrayList<>();
+        students=group.getStudents();
+        int index = 0;
+        int i=0;
+        for(Student groupStudent : students){
+            if(groupStudent.getMail().equals(student.getMail())) {
+                index = i;
+                break;
+            }
+            i++;
+        }
+        return index;
+    }
 }

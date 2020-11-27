@@ -12,6 +12,7 @@ import app.view.Layout.InternalLayout;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -48,11 +49,13 @@ public class GroupView extends VerticalLayout {
     private HorizontalLayout nameLayout;
     private HorizontalLayout teacherLayout;
     private Dialog addGroupDialog;
+    private Dialog deleteGroupDialog;
     private Button addGroupButton;
+    private Button deleteGroupButton;
+    private HorizontalLayout buttonLayout;
 
     public GroupView(){
         infoLabel = new Label();
-        setDefaultHorizontalComponentAlignment(Alignment.CENTER);
         add(infoLabel);
     }
 
@@ -72,10 +75,19 @@ public class GroupView extends VerticalLayout {
             if(usersGroups.size()%2==1)
                 allGroupsLayout.add(twoGroupsLayout);
             this.add(allGroupsLayout);
+            if(user.getUserType()==UserType.TEACHER) {
+                buttonLayout=new HorizontalLayout();
+                addGroupButton=new Button("Dodaj grupę");
+                addGroupDialog=new Dialog();
+                setButton(addGroupButton, addGroupDialog);
+                deleteGroupButton=new Button("Usuń grupy");
+                deleteGroupDialog=new Dialog();
+                setButton(deleteGroupButton,deleteGroupDialog);
+                add(buttonLayout);
+            }
         }
         catch (Exception e){}
     }
-
 
 
     private void defineGroupsList() {
@@ -84,7 +96,6 @@ public class GroupView extends VerticalLayout {
             user = userRepository.findByMail(session.getAttribute("user").toString());
             if(user.getUserType()==UserType.TEACHER) {
                 usersGroups = groupRepository.findByTeacher(user);
-                setAddGroupButton();
             }
             else if(user.getUserType()==UserType.STUDENT) {
                 usersGroups = groupRepository.findByStudentsMailContaining(user.getMail());
@@ -93,20 +104,33 @@ public class GroupView extends VerticalLayout {
         catch (Exception e){infoLabel.setText("Zaloguj się, aby uzyskać dostęp do swoich grup");}
     }
 
-    private void setAddGroupButton() {
-        addGroupButton=new Button("Dodaj grupę");
-        addGroupDialog=new Dialog();
-        addGroupButton.addClickListener(event -> {
-            Dialog dialog=new Dialog();
-            dialog.setWidth("1000px");
-            dialog.addDetachListener(dialogOpenedChangeEvent->{
-                UI.getCurrent().getPage().reload();
-            });
-            AddGroupView addAddGroupView= new AddGroupView((Teacher) user, dialog, studentRepository, groupRepository, instrumentRepository);
-            dialog.add(addAddGroupView);
-            dialog.open();
-        });
-        add(addGroupButton);
+    private void setButton(Button button, Dialog dialog) {
+        button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        button.addClickListener(event -> {
+                    dialog.setWidth("1000px");
+                    dialog.addDetachListener(dialogOpenedChangeEvent -> {
+                        UI.getCurrent().getPage().reload();
+                    });
+                    if (button.getText().contains("Dodaj"))
+                        setAddGroupDialog();
+                    else
+                        setDeleteGroupDialog();
+                });
+            buttonLayout.add(button);
+    }
+
+
+
+    private void setAddGroupDialog() {
+        AddGroupView addAddGroupView = new AddGroupView((Teacher) user, addGroupDialog, studentRepository, groupRepository, instrumentRepository);
+        addGroupDialog.add(addAddGroupView);
+        addGroupDialog.open();
+    }
+
+    private void setDeleteGroupDialog() {
+        DeleteGroupView deleteGroupView=new DeleteGroupView(deleteGroupDialog, groupRepository);
+        deleteGroupDialog.add(deleteGroupView);
+        deleteGroupDialog.open();
     }
 
     //Group layouts are grouped as two, and "i" says if it's first or second

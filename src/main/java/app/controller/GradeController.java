@@ -24,4 +24,5 @@ public class GradeController {
         student.setGrades(grades);
         return student;
     }
+
 }

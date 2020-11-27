@@ -50,10 +50,11 @@ public class GradesView
     private Grade editedGrade;
 
     //for Students view
-    public GradesView(Student student){
+    public GradesView(Student student, Group group){
         this.student=student;
+        this.group=group;
         binder=new Binder<>();
-        addGradesGrid(student);
+        addGradesGrid(student, group);
     }
 
     //for teachers view, adds edit option
@@ -64,7 +65,7 @@ public class GradesView
         this.groupRepository=groupRepository;
         this.studentRepository=studentRepository;
         binder=new Binder<>();
-        addGradesGrid(student);
+        addGradesGrid(student, group);
         setEditColumn();
     }
 
@@ -73,10 +74,11 @@ public class GradesView
         return gradeGrid;
     }
 
-    private void addGradesGrid(Student student) {
+    private void addGradesGrid(Student student, Group group) {
         gradeGrid=new Grid<>();
-        if(student.getGrades()!=null)
-            gradeGrid.setItems(student.getGrades());
+        GroupController groupController=new GroupController();
+        if(group.getStudents().get(groupController.getStudentIndex(group, student)).getGrades()!=null)
+            gradeGrid.setItems(group.getStudents().get(groupController.getStudentIndex(group, student)).getGrades());
         gradeColumn= gradeGrid.addColumn(Grade::getGrade).setHeader("Ocena");
         descriptionColumn=gradeGrid.addColumn(Grade::getGradeDescription).setHeader("Opis").setWidth("400px");
         teacherColumn=gradeGrid.addColumn(Grade->Grade.getTeacher().getFirstName()+" " +Grade.getTeacher().getLastName()).setHeader("Nauczyciel");

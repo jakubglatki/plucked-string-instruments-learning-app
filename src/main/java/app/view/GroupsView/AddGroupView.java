@@ -110,6 +110,12 @@ public class AddGroupView extends VerticalLayout {
             ArrayList<Student> students = new ArrayList<>();
             students.addAll(studentsGrid.getSelectedItems());
             Group group = new Group(nameField.getValue(), instrumentComboBox.getValue(), teacher, students);
+
+            //so no grades from previous groups will move to another
+            for (Student student: group.getStudents()
+                 ) {
+                student.setGrades(null);
+            }
             groupRepository.save(group);
             dialog.close();
         }
