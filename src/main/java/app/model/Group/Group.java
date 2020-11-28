@@ -1,6 +1,7 @@
 package app.model.Group;
 
 import app.model.Instrument.Instrument;
+import app.model.Lesson.Lesson;
 import app.model.User.Student.Student;
 import app.model.User.Teacher.Teacher;
 import app.model.User.User;
@@ -21,17 +22,9 @@ public class Group {
     private Instrument instrument;
     private User teacher;
     private ArrayList<Student> students;
-    private ArrayList<String> classesDates;
+    private ArrayList<Lesson> Lessons;
 
     public Group(){}
-
-    public Group(String name, Instrument instrument, User teacher, ArrayList<Student> students, ArrayList<String> classesDates) {
-        this.name = name;
-        this.instrument = instrument;
-        this.teacher = teacher;
-        this.students = students;
-        this.classesDates = classesDates;
-    }
 
     public Group(String name, Instrument instrument, User teacher) {
         this.name = name;
@@ -74,13 +67,5 @@ public class Group {
 
     public void setStudents(ArrayList<Student> students) {
         this.students = students;
-    }
-
-    public ArrayList<String> getClassesDates() {
-        return classesDates;
-    }
-
-    public void setClassesDates(ArrayList<String> classesDates) {
-        this.classesDates = classesDates;
     }
 }
