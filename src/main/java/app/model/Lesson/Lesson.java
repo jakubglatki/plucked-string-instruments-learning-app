@@ -3,18 +3,17 @@ package app.model.Lesson;
 import app.model.Group.Group;
 import app.model.User.Student.Student;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 public class Lesson {
     private ArrayList<LessonPresence> lessonPresences;
     private String topic;
-    private Date classDate;
+    private LocalDate classDate;
 
 
-    public Lesson(Group group, String topic, Date classDate){
+    public Lesson(Group group, String topic, LocalDate classDate){
         this.topic=topic;
         this.classDate=classDate;
         lessonPresences=new ArrayList<>();
@@ -44,11 +43,11 @@ public class Lesson {
         this.topic = topic;
     }
 
-    public Date getClassDate() {
+    public LocalDate getClassDate() {
         return classDate;
     }
 
-    public void setClassDate(Date classDate) {
+    public void setClassDate(LocalDate classDate) {
         this.classDate = classDate;
     }
 

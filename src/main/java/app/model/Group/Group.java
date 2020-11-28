@@ -24,6 +24,14 @@ public class Group {
     private ArrayList<Student> students;
     private ArrayList<Lesson> Lessons;
 
+    public ArrayList<Lesson> getLessons() {
+        return Lessons;
+    }
+
+    public void setLessons(ArrayList<Lesson> lessons) {
+        Lessons = lessons;
+    }
+
     public Group(){}
 
     public Group(String name, Instrument instrument, User teacher) {

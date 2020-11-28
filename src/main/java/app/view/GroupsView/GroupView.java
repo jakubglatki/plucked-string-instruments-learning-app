@@ -9,7 +9,9 @@ import app.model.User.User;
 import app.model.User.UserRepository;
 import app.model.User.UserType;
 import app.view.Layout.InternalLayout;
+import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -26,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 
 @Route(value="group", layout = InternalLayout.class)
 @CssImport("./styles/shared-styles.css")
@@ -175,7 +178,9 @@ public class GroupView extends VerticalLayout {
         teacherLayout=new HorizontalLayout();
         TextField teacher=new TextField("Nauczyciel");
         teacher.setValue(group.getTeacher().getFirstName()+" "+group.getTeacher().getLastName());
-        DatePicker datePicker=new DatePicker(LocalDate.now());//group.getClassesDates().get(0));
+        DatePicker datePicker= new DatePicker();
+        if(group.getLessons()!=null)
+           datePicker.setValue(group.getLessons().get(0).getClassDate());
         datePicker.setLabel("Najbliższa lekcja");
         teacher.setReadOnly(true);
         datePicker.setReadOnly(true);
