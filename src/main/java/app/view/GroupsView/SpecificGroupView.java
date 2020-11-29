@@ -50,18 +50,21 @@ public class SpecificGroupView extends VerticalLayout {
     private Label infoLabel;
     private HorizontalLayout infoLayout;
     private HorizontalLayout buttonLayout;
+    private HorizontalLayout studentsButtonsLayout;
     private TextField nameField;
     private TextField instrumentField;
     private TextField teacherField;
     private Grid<Student> studentGrid;
     private Button gradesButton;
     private Button studentsGradesButton;
+    private Button studentPresenceButton;
     private Button addGradeButton;
     private Button addLessonButton;
     private Dialog addLessonDialog;
     private Button addStudentsButton;
     private Button removeStudentsButton;
     private AddGradeView addGradeView;
+    private Dialog dialogPresence;
     private Dialog dialogGradesView;
     private Dialog dialogAddGrade;
     private Dialog dialogEditStudents;
@@ -79,8 +82,12 @@ public class SpecificGroupView extends VerticalLayout {
             group= (Group) VaadinSession.getCurrent().getAttribute("group");
             setTextFields();
             setStudentGrid();
-            if(currentUser.getUserType()==UserType.STUDENT)
+            if(currentUser.getUserType()==UserType.STUDENT) {
+                studentsButtonsLayout = new HorizontalLayout();
                 setGradesButton();
+                setPresenceButton();
+                add(studentsButtonsLayout);
+            }
             if(currentUser.getUserType()==UserType.TEACHER) {
                 buttonLayout=new HorizontalLayout();
                 setAddStudentsButton();
@@ -116,9 +123,9 @@ public class SpecificGroupView extends VerticalLayout {
         if(currentUser.getUserType()==UserType.TEACHER) {
             setSeeStudentsGradesButton();
             setAddStudentsGradesButton();
+            setSeeStudentsPresenceButton();
         }
         studentGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES, GridVariant.LUMO_COMPACT);
-        studentGrid.setHeightByRows(true);
         add(studentGrid);
     }
 
@@ -135,6 +142,18 @@ public class SpecificGroupView extends VerticalLayout {
         });
     }
 
+    private void setSeeStudentsPresenceButton() {
+        Collection<Button> seePresenceButtons= Collections.newSetFromMap(new WeakHashMap<>());
+        studentGrid.addComponentColumn(student->{
+            studentPresenceButton=new Button("Pokaż obecność");
+            studentPresenceButton.addClickListener(e->{
+                showPresenceClickListener(student);
+            });
+            seePresenceButtons.add(studentPresenceButton);
+            return studentPresenceButton;
+        });
+    }
+
     private void setAddStudentsGradesButton() {
         Collection<Button> addGradesButtons= Collections.newSetFromMap(new WeakHashMap<>());
         studentGrid.addComponentColumn(student->{
@@ -146,11 +165,22 @@ public class SpecificGroupView extends VerticalLayout {
 
     private void setGradesButton(){
         gradesButton=new Button("Pokaż moje oceny");
+        gradesButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         gradesButton.addClickListener(e->{
             showGradesClickListener((Student)currentUser);
         });
-        add(gradesButton);
+        studentsButtonsLayout.add(gradesButton);
     }
+
+    private void setPresenceButton(){
+        studentPresenceButton= new Button("Pokaż moją obecność");
+        studentPresenceButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        studentPresenceButton.addClickListener(event -> {
+            showPresenceClickListener((Student)currentUser);
+        });
+        studentsButtonsLayout.add(studentPresenceButton);
+    }
+
 
     private void showGradesClickListener(Student student) {
         dialogGradesView=new Dialog();
@@ -168,6 +198,19 @@ public class SpecificGroupView extends VerticalLayout {
         dialogGradesView.open();
     }
 
+
+    private void showPresenceClickListener(Student student) {
+        dialogPresence=new Dialog();
+        StudentPresenceView studentPresenceView;
+        if(currentUser.getUserType()==UserType.TEACHER)
+            studentPresenceView=new StudentPresenceView(student, group, groupRepository);
+        else
+            studentPresenceView=new StudentPresenceView(student,group);
+        dialogPresence.setWidth("1100px");
+        dialogPresence.add(studentPresenceView);
+        dialogPresence.open();
+
+    }
 
     private void setAddGradeButton(Student student) {
         addGradeButton=new Button("Dodaj ocenę");

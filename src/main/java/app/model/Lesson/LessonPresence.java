@@ -25,4 +25,8 @@ public class LessonPresence {
     public void setPresent(boolean present) {
         isPresent = present;
     }
+
+    public Student getStudent() {
+        return student;
+    }
 }

@@ -40,7 +40,15 @@ public class Lesson implements Comparable<Lesson>{
             lessonPresences.add(lessonPresence);
         }
     }
-    
+
+    public LessonPresence getStudentsLessonPresences(Student student)
+    {
+        for(LessonPresence lessonPresence: this.getLessonPresences())
+            if(student.getMail().contains(lessonPresence.getStudent().getMail())){
+                return lessonPresence;
+            }
+        return lessonPresences.get(0);
+    }
     public ArrayList<LessonPresence> getLessonPresences() {
         return lessonPresences;
     }
@@ -48,6 +56,7 @@ public class Lesson implements Comparable<Lesson>{
     public void setLessonPresences(ArrayList<LessonPresence> lessonPresences) {
         this.lessonPresences = lessonPresences;
     }
+
 
     public String getTopic() {
         return topic;
