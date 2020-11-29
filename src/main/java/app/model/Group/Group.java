@@ -22,14 +22,14 @@ public class Group {
     private Instrument instrument;
     private User teacher;
     private ArrayList<Student> students;
-    private ArrayList<Lesson> Lessons;
+    private ArrayList<Lesson> lessons;
 
     public ArrayList<Lesson> getLessons() {
-        return Lessons;
+        return lessons;
     }
 
     public void setLessons(ArrayList<Lesson> lessons) {
-        Lessons = lessons;
+        this.lessons = lessons;
     }
 
     public Group(){}
@@ -43,6 +43,14 @@ public class Group {
     public Group(String name, Instrument instrument, Teacher teacher, ArrayList<Student> students){
         this(name,instrument,teacher);
         this.students=students;
+    }
+
+    public Group(String name, Instrument instrument, User teacher, ArrayList<Student> students, ArrayList<Lesson> lessons) {
+        this.name = name;
+        this.instrument = instrument;
+        this.teacher = teacher;
+        this.students = students;
+        this.lessons = lessons;
     }
 
     public String getName() {

@@ -3,6 +3,7 @@ package app.view.GroupsView;
 import app.controller.GroupController;
 import app.model.Group.Group;
 import app.model.Group.GroupRepository;
+import app.model.Lesson.LessonRepository;
 import app.model.User.Student.Student;
 import app.model.User.Student.StudentRepository;
 import app.model.User.Teacher.Teacher;
@@ -10,6 +11,7 @@ import app.model.User.User;
 import app.model.User.UserRepository;
 import app.model.User.UserType;
 import app.view.Layout.InternalLayout;
+import app.view.LessonView.AddLessonView;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -40,6 +42,9 @@ public class SpecificGroupView extends VerticalLayout {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private LessonRepository lessonRepository;
+
     private Group group;
     private User currentUser;
     private Label infoLabel;
@@ -52,6 +57,8 @@ public class SpecificGroupView extends VerticalLayout {
     private Button gradesButton;
     private Button studentsGradesButton;
     private Button addGradeButton;
+    private Button addLessonButton;
+    private Dialog addLessonDialog;
     private Button addStudentsButton;
     private Button removeStudentsButton;
     private AddGradeView addGradeView;
@@ -78,6 +85,7 @@ public class SpecificGroupView extends VerticalLayout {
                 buttonLayout=new HorizontalLayout();
                 setAddStudentsButton();
                 setRemoveStudentsButton();
+                setAddLessonButton();
                 add(buttonLayout);
             }
         }
@@ -97,7 +105,7 @@ public class SpecificGroupView extends VerticalLayout {
         teacherField.setReadOnly(true);
         infoLayout=new HorizontalLayout(nameField,instrumentField,teacherField);
         add(infoLayout);
-        setHorizontalComponentAlignment(Alignment.CENTER, infoLayout);
+        setHorizontalComponentAlignment(Alignment.START, infoLayout);
     }
 
     private void setStudentGrid(){
@@ -160,6 +168,7 @@ public class SpecificGroupView extends VerticalLayout {
         dialogGradesView.open();
     }
 
+
     private void setAddGradeButton(Student student) {
         addGradeButton=new Button("Dodaj ocenę");
         addGradeButton.addClickListener(event -> {
@@ -185,6 +194,19 @@ public class SpecificGroupView extends VerticalLayout {
         buttonLayout.add(addStudentsButton);
     }
 
+    private void setAddLessonButton() {
+        addLessonButton=new Button("Dodaj lekcję");
+        addLessonButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        addLessonDialog=new Dialog();
+        addLessonButton.addClickListener(event -> {
+            addLessonDialog.removeAll();
+            AddLessonView addLessonView=new AddLessonView(group, groupRepository,lessonRepository, addLessonDialog);
+            addLessonDialog.add(addLessonView);
+            addLessonDialog.open();
+        });
+        buttonLayout.add(addLessonButton);
+        buttonLayout.setVerticalComponentAlignment(Alignment.END, addLessonButton);
+    }
     private void setEditStudentsDialog(Boolean isItAdd) {
         dialogEditStudents=new Dialog();
         dialogEditStudents.setWidth("1100px");

@@ -6,6 +6,7 @@ import app.model.Group.Group;
 import app.model.Group.GroupRepository;
 import app.model.User.Student.Student;
 import app.model.User.Student.StudentRepository;
+import app.model.User.Teacher.Teacher;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -26,10 +27,12 @@ public class DeleteGroupView extends VerticalLayout {
     private Button cancelButton;
     private HorizontalLayout buttonLayout;
     private Dialog dialog;
+    private Teacher teacher;
 
 
-    public DeleteGroupView(Dialog dialog, GroupRepository groupRepository) {
+    public DeleteGroupView(Dialog dialog,Teacher teacher, GroupRepository groupRepository) {
         this.dialog = dialog;
+        this.teacher=teacher;
         this.groupRepository = groupRepository;
         this.groupController = new GroupController();
         this.buttonLayout = new HorizontalLayout();
@@ -72,7 +75,7 @@ public class DeleteGroupView extends VerticalLayout {
     private void setGrid() {
         groupGrid = new Grid<>();
         ArrayList<Group> groups;
-        groups = (ArrayList<Group>) groupRepository.findAll();
+        groups = (ArrayList<Group>) groupRepository.findByTeacher(teacher);
         groupGrid.setItems(groups);
         groupGrid.setSelectionMode(Grid.SelectionMode.MULTI);
         groupGrid.addColumn(Group::getName).setHeader("Nazwa");

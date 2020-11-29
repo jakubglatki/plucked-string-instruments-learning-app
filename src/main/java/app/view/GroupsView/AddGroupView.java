@@ -9,6 +9,7 @@ import app.model.User.Student.Student;
 import app.model.User.Student.StudentRepository;
 import app.model.User.Teacher.Teacher;
 import app.model.User.UserType;
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -93,6 +94,7 @@ public class AddGroupView extends VerticalLayout {
 
     private void setButtons() {
         addGroupButton=new Button("Dodaj");
+        addGroupButton.addClickShortcut(Key.ENTER);
         addGroupButton.addClickListener(event -> {
             addNewGroup();
         });

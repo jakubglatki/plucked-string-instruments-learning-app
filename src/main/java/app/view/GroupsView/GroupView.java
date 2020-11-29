@@ -16,6 +16,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.datetimepicker.DateTimePicker;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Label;
@@ -78,33 +79,37 @@ public class GroupView extends VerticalLayout {
             if(usersGroups.size()%2==1)
                 allGroupsLayout.add(twoGroupsLayout);
             this.add(allGroupsLayout);
-            if(user.getUserType()==UserType.TEACHER) {
-                buttonLayout=new HorizontalLayout();
-                addGroupButton=new Button("Dodaj grupę");
-                addGroupDialog=new Dialog();
-                setButton(addGroupButton, addGroupDialog);
-                deleteGroupButton=new Button("Usuń grupy");
-                deleteGroupDialog=new Dialog();
-                setButton(deleteGroupButton,deleteGroupDialog);
-                add(buttonLayout);
-            }
         }
         catch (Exception e){}
     }
 
+    private  void setTeachersButtons(){
+        if(user.getUserType()==UserType.TEACHER) {
+            buttonLayout=new HorizontalLayout();
+            addGroupButton=new Button("Dodaj grupę");
+            addGroupDialog=new Dialog();
+            setButton(addGroupButton, addGroupDialog);
+            deleteGroupButton=new Button("Usuń grupy");
+            deleteGroupDialog=new Dialog();
+            setButton(deleteGroupButton,deleteGroupDialog);
+            add(buttonLayout);
+        }
+    }
 
     private void defineGroupsList() {
         VaadinSession session=VaadinSession.getCurrent();
         try{
             user = userRepository.findByMail(session.getAttribute("user").toString());
             if(user.getUserType()==UserType.TEACHER) {
+                setTeachersButtons();
                 usersGroups = groupRepository.findByTeacher(user);
             }
             else if(user.getUserType()==UserType.STUDENT) {
                 usersGroups = groupRepository.findByStudentsMailContaining(user.getMail());
             }
         }
-        catch (Exception e){infoLabel.setText("Zaloguj się, aby uzyskać dostęp do swoich grup");}
+        catch (Exception e){
+            infoLabel.setText("Nie należysz obecnie do żadnej grupy");}
     }
 
     private void setButton(Button button, Dialog dialog) {
@@ -131,7 +136,7 @@ public class GroupView extends VerticalLayout {
     }
 
     private void setDeleteGroupDialog() {
-        DeleteGroupView deleteGroupView=new DeleteGroupView(deleteGroupDialog, groupRepository);
+        DeleteGroupView deleteGroupView=new DeleteGroupView(deleteGroupDialog, (Teacher) user,groupRepository);
         deleteGroupDialog.add(deleteGroupView);
         deleteGroupDialog.open();
     }
@@ -178,7 +183,7 @@ public class GroupView extends VerticalLayout {
         teacherLayout=new HorizontalLayout();
         TextField teacher=new TextField("Nauczyciel");
         teacher.setValue(group.getTeacher().getFirstName()+" "+group.getTeacher().getLastName());
-        DatePicker datePicker= new DatePicker();
+        DateTimePicker datePicker= new DateTimePicker();
         if(group.getLessons()!=null)
            datePicker.setValue(group.getLessons().get(0).getClassDate());
         datePicker.setLabel("Najbliższa lekcja");
