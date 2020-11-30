@@ -3,6 +3,8 @@ package app.view.GroupsView;
 import app.controller.GroupController;
 import app.model.Group.Group;
 import app.model.Group.GroupRepository;
+import app.model.Instrument.Instrument;
+import app.model.Lesson.Lesson;
 import app.model.Lesson.LessonRepository;
 import app.model.User.Student.Student;
 import app.model.User.Student.StudentRepository;
@@ -15,6 +17,9 @@ import app.view.LessonView.AddLessonView;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.datetimepicker.DateTimePicker;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
@@ -31,6 +36,7 @@ import java.util.Collections;
 import java.util.WeakHashMap;
 
 @Route(value="specificGroup", layout = InternalLayout.class)
+@CssImport("./styles/shared-styles.css")
 public class SpecificGroupView extends VerticalLayout {
 
     @Autowired
@@ -68,6 +74,9 @@ public class SpecificGroupView extends VerticalLayout {
     private Dialog dialogGradesView;
     private Dialog dialogAddGrade;
     private Dialog dialogEditStudents;
+    private HorizontalLayout seeLessonLayout;
+    private ComboBox<Lesson> lessonTopicComboBox;
+    private DateTimePicker lessonDatePicker;
 
     public SpecificGroupView()
     {
@@ -81,6 +90,7 @@ public class SpecificGroupView extends VerticalLayout {
             currentUser = userRepository.findByMail(VaadinSession.getCurrent().getAttribute("user").toString());
             group= (Group) VaadinSession.getCurrent().getAttribute("group");
             setTextFields();
+            setLessonLayout();
             setStudentGrid();
             if(currentUser.getUserType()==UserType.STUDENT) {
                 studentsButtonsLayout = new HorizontalLayout();
@@ -100,6 +110,7 @@ public class SpecificGroupView extends VerticalLayout {
     }
 
 
+
     private void setTextFields() {
         nameField=new TextField("Nazwa");
         nameField.setValue(group.getName());
@@ -114,6 +125,27 @@ public class SpecificGroupView extends VerticalLayout {
         add(infoLayout);
         setHorizontalComponentAlignment(Alignment.START, infoLayout);
     }
+
+    private void setLessonLayout() {
+        lessonTopicComboBox=new ComboBox<>();
+        lessonTopicComboBox.setLabel("Temat lekcji");
+        lessonTopicComboBox.setItems(group.getLessons());
+        lessonTopicComboBox.setItemLabelGenerator(Lesson::getTopic);
+        lessonTopicComboBox.setAllowCustomValue(false);
+        lessonTopicComboBox.setRequired(true);
+        lessonTopicComboBox.setAllowCustomValue(false);
+
+        lessonDatePicker=new DateTimePicker();
+        lessonDatePicker.setLabel("Data");
+        lessonDatePicker.setReadOnly(true);
+
+        lessonTopicComboBox.addValueChangeListener(comboBoxLessonComponentValueChangeEvent -> lessonDatePicker.setValue(lessonTopicComboBox.getValue().getClassDate()));
+
+        seeLessonLayout=new HorizontalLayout(lessonTopicComboBox, lessonDatePicker);
+        seeLessonLayout.addClassName("group-grid");
+        infoLayout.add(seeLessonLayout);
+    }
+
 
     private void setStudentGrid(){
         studentGrid=new Grid<>();
@@ -241,6 +273,7 @@ public class SpecificGroupView extends VerticalLayout {
         addLessonButton=new Button("Dodaj lekcję");
         addLessonButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         addLessonDialog=new Dialog();
+        addLessonDialog.addOpenedChangeListener(dialogOpenedChangeEvent -> {lessonTopicComboBox.getDataProvider().refreshAll();});
         addLessonButton.addClickListener(event -> {
             addLessonDialog.removeAll();
             AddLessonView addLessonView=new AddLessonView(group, groupRepository,lessonRepository, addLessonDialog);
