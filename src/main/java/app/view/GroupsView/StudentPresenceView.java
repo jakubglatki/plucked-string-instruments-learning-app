@@ -49,11 +49,7 @@ public class StudentPresenceView extends VerticalLayout
         binder=new Binder<>();
         addPresenceGrid(student, group);
     }
-
-
-    public Grid<Lesson> getStudentPresenceGrid() {
-        return presenceGrid;
-    }
+    
 
     private void addPresenceGrid(Student student, Group group) {
         presenceGrid=new Grid<>();

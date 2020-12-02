@@ -27,9 +27,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
 @Route(value="group", layout = InternalLayout.class)
 @CssImport("./styles/shared-styles.css")
@@ -79,6 +77,7 @@ public class GroupView extends VerticalLayout {
             if(usersGroups.size()%2==1)
                 allGroupsLayout.add(twoGroupsLayout);
             this.add(allGroupsLayout);
+            setTeachersButtons();
         }
         catch (Exception e){}
     }
@@ -101,7 +100,6 @@ public class GroupView extends VerticalLayout {
         try{
             user = userRepository.findByMail(session.getAttribute("user").toString());
             if(user.getUserType()==UserType.TEACHER) {
-                setTeachersButtons();
                 usersGroups = groupRepository.findByTeacher(user);
             }
             else if(user.getUserType()==UserType.STUDENT) {
@@ -109,7 +107,7 @@ public class GroupView extends VerticalLayout {
             }
         }
         catch (Exception e){
-            infoLabel.setText("Nie należysz obecnie do żadnej grupy");}
+            infoLabel.setText("Zaloguj się, aby uzyskać dostęp do swoich grup");}
     }
 
     private void setButton(Button button, Dialog dialog) {
@@ -151,6 +149,7 @@ public class GroupView extends VerticalLayout {
         groupLayout.addClickListener(e->{
             VaadinSession.getCurrent().setAttribute("group", group);
             UI.getCurrent().navigate(SpecificGroupView.class);});
+
         if(i==0)
             makeNewTwoGroupsLayout(groupLayout);
         else

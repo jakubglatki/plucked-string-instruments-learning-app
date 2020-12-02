@@ -14,7 +14,9 @@ import app.model.User.UserRepository;
 import app.model.User.UserType;
 import app.view.Layout.InternalLayout;
 import app.view.LessonView.AddLessonView;
+import app.view.LessonView.LessonView;
 import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -132,20 +134,29 @@ public class SpecificGroupView extends VerticalLayout {
         lessonTopicComboBox.setItems(group.getLessons());
         lessonTopicComboBox.setItemLabelGenerator(Lesson::getTopic);
         lessonTopicComboBox.setAllowCustomValue(false);
-        lessonTopicComboBox.setRequired(true);
-        lessonTopicComboBox.setAllowCustomValue(false);
 
         lessonDatePicker=new DateTimePicker();
         lessonDatePicker.setLabel("Data");
         lessonDatePicker.setReadOnly(true);
 
-        lessonTopicComboBox.addValueChangeListener(comboBoxLessonComponentValueChangeEvent -> lessonDatePicker.setValue(lessonTopicComboBox.getValue().getClassDate()));
+
 
         seeLessonLayout=new HorizontalLayout(lessonTopicComboBox, lessonDatePicker);
+        setLessonLayoutClickListener();
         seeLessonLayout.addClassName("group-grid");
         infoLayout.add(seeLessonLayout);
     }
 
+    private void setLessonLayoutClickListener(){
+        lessonTopicComboBox.addValueChangeListener(comboBoxLessonComponentValueChangeEvent ->
+        {lessonDatePicker.setValue(lessonTopicComboBox.getValue().getClassDate());
+            if(lessonDatePicker.getValue()!=null){
+                seeLessonLayout.addClickListener(e-> {
+                    VaadinSession.getCurrent().setAttribute("lesson", lessonTopicComboBox.getValue());
+                    UI.getCurrent().navigate(LessonView.class);
+                });
+            }});
+    }
 
     private void setStudentGrid(){
         studentGrid=new Grid<>();
