@@ -1,5 +1,6 @@
 package app.view.GroupsView;
 
+import app.StringsValues;
 import app.controller.GroupController;
 import app.model.Group.Group;
 import app.model.Group.GroupRepository;
@@ -14,6 +15,7 @@ import app.model.User.UserRepository;
 import app.model.User.UserType;
 import app.view.Layout.InternalLayout;
 import app.view.LessonView.AddLessonView;
+import app.view.LessonView.DeleteLessonView;
 import app.view.LessonView.LessonView;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.UI;
@@ -29,10 +31,12 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.WeakHashMap;
@@ -67,8 +71,8 @@ public class SpecificGroupView extends VerticalLayout {
     private Button studentsGradesButton;
     private Button studentPresenceButton;
     private Button addGradeButton;
-    private Button addLessonButton;
-    private Dialog addLessonDialog;
+    private Button editLessonButton;
+    private Dialog editLessonDialog;
     private Button addStudentsButton;
     private Button removeStudentsButton;
     private AddGradeView addGradeView;
@@ -104,7 +108,8 @@ public class SpecificGroupView extends VerticalLayout {
                 buttonLayout=new HorizontalLayout();
                 setAddStudentsButton();
                 setRemoveStudentsButton();
-                setAddLessonButton();
+                setEditLessonButton(StringsValues.ADD_LESSON,true);
+                setEditLessonButton(StringsValues.DELETE_LESSON,false);
                 add(buttonLayout);
             }
         }
@@ -138,8 +143,6 @@ public class SpecificGroupView extends VerticalLayout {
         lessonDatePicker=new DateTimePicker();
         lessonDatePicker.setLabel("Data");
         lessonDatePicker.setReadOnly(true);
-
-
 
         seeLessonLayout=new HorizontalLayout(lessonTopicComboBox, lessonDatePicker);
         setLessonLayoutClickListener();
@@ -280,28 +283,39 @@ public class SpecificGroupView extends VerticalLayout {
         buttonLayout.add(addStudentsButton);
     }
 
-    private void setAddLessonButton() {
-        addLessonButton=new Button("Dodaj lekcję");
-        addLessonButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        addLessonDialog=new Dialog();
-        addLessonDialog.addOpenedChangeListener(dialogOpenedChangeEvent -> {lessonTopicComboBox.getDataProvider().refreshAll();});
-        addLessonButton.addClickListener(event -> {
-            addLessonDialog.removeAll();
-            AddLessonView addLessonView=new AddLessonView(group, groupRepository,lessonRepository, addLessonDialog);
-            addLessonDialog.add(addLessonView);
-            addLessonDialog.open();
-        });
-        buttonLayout.add(addLessonButton);
-        buttonLayout.setVerticalComponentAlignment(Alignment.END, addLessonButton);
+    private void setEditLessonButton(String buttonText, boolean isAdd) {
+        editLessonButton=new Button(buttonText);
+        editLessonButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        editLessonDialog=new Dialog();
+        editLessonDialog.setWidth("1100px");
+        setEditLessonButtonListener(isAdd);
+        buttonLayout.add(editLessonButton);
+        buttonLayout.setVerticalComponentAlignment(Alignment.END, editLessonButton);
     }
-    private void setEditStudentsDialog(Boolean isItAdd) {
+
+    private void setEditLessonButtonListener(boolean isAdd){
+        editLessonButton.addClickListener(event -> {
+            editLessonDialog.removeAll();
+            if(isAdd) {
+                AddLessonView addLessonView = new AddLessonView(group, groupRepository, lessonRepository, editLessonDialog);
+                editLessonDialog.add(addLessonView);
+            }
+            else{
+                DeleteLessonView deleteLessonView=new DeleteLessonView(editLessonDialog, group, groupRepository);
+                editLessonDialog.add(deleteLessonView);
+            }
+            editLessonDialog.open();
+        });
+        editLessonDialog.addOpenedChangeListener(e-> lessonTopicComboBox.setItems(group.getLessons()));
+    }
+
+    private void setEditStudentsDialog(boolean isItAdd) {
         dialogEditStudents=new Dialog();
         dialogEditStudents.setWidth("1100px");
         dialogEditStudents.addOpenedChangeListener(dialogOpenedChangeEvent -> {
             if(isItAdd)
                 studentGrid.getDataProvider().refreshAll();
-            else if(!isItAdd)
-            {
+            else {
                 this.remove(studentGrid, buttonLayout);
                 setStudentGrid();
                 this.add(buttonLayout);
