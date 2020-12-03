@@ -1,7 +1,6 @@
 package app.view.LessonView;
 
-import app.StringsValues;
-import app.controller.GroupController;
+import app.LABEL_NAMES;
 import app.model.Group.Group;
 import app.model.Group.GroupRepository;
 import app.model.Lesson.Lesson;
@@ -77,7 +76,7 @@ public class DeleteLessonView extends VerticalLayout {
         lessonGrid = new Grid<>();
         lessonGrid.setItems(group.getLessons());
         lessonGrid.setSelectionMode(Grid.SelectionMode.MULTI);
-        lessonGrid.addColumn(Lesson::getTopic).setHeader(StringsValues.TOPIC);
+        lessonGrid.addColumn(Lesson::getTopic).setHeader(LABEL_NAMES.TOPIC);
         setClassDateColumn();
         lessonGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES, GridVariant.LUMO_COMPACT);
         add(lessonGrid);
@@ -86,6 +85,6 @@ public class DeleteLessonView extends VerticalLayout {
 
     private void setClassDateColumn() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-        lessonGrid.addColumn(Lesson -> formatter.format(Lesson.getClassDate())).setHeader(StringsValues.DATE);
+        lessonGrid.addColumn(Lesson -> formatter.format(Lesson.getClassDate())).setHeader(LABEL_NAMES.DATE);
     }
 }

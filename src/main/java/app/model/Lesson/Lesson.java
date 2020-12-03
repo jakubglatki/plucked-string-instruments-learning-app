@@ -74,7 +74,7 @@ public class Lesson implements Comparable<Lesson>{
         this.classDate = classDate;
     }
 
-    public boolean isActive() {
+    public boolean getIsActive() {
         return isActive;
     }
 

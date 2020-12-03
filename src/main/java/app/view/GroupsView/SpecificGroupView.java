@@ -1,10 +1,8 @@
 package app.view.GroupsView;
 
-import app.StringsValues;
-import app.controller.GroupController;
+import app.LABEL_NAMES;
 import app.model.Group.Group;
 import app.model.Group.GroupRepository;
-import app.model.Instrument.Instrument;
 import app.model.Lesson.Lesson;
 import app.model.Lesson.LessonRepository;
 import app.model.User.Student.Student;
@@ -31,12 +29,10 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.WeakHashMap;
@@ -108,8 +104,8 @@ public class SpecificGroupView extends VerticalLayout {
                 buttonLayout=new HorizontalLayout();
                 setAddStudentsButton();
                 setRemoveStudentsButton();
-                setEditLessonButton(StringsValues.ADD_LESSON,true);
-                setEditLessonButton(StringsValues.DELETE_LESSON,false);
+                setEditLessonButton(LABEL_NAMES.ADD_LESSON,true);
+                setEditLessonButton(LABEL_NAMES.DELETE_LESSON,false);
                 add(buttonLayout);
             }
         }
