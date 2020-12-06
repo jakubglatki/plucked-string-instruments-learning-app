@@ -1,5 +1,6 @@
 package app.view.GroupsView;
 
+import app.controller.GradeController;
 import app.controller.StudentController;
 import app.model.Group.Group;
 import app.model.Group.GroupRepository;
@@ -22,9 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class AddGradeView extends VerticalLayout {
 
-    @Autowired
     private GroupRepository groupRepository;
-    @Autowired
+
     private StudentRepository studentRepository;
 
     private Student student;
@@ -91,12 +91,11 @@ public class AddGradeView extends VerticalLayout {
             dialog.close();
         });
     }
+
     private void addGrade() {
         if(this.gradeField.getValue() != null && !this.descriptionField.getValue().isBlank()) {
-            StudentController studentController= new StudentController();
-            studentController.addGrade(new Grade(teacher, gradeField.getValue(), descriptionField.getValue()), student);
+            GradeController.addGrade(new Grade(teacher, gradeField.getValue(), descriptionField.getValue()), student);
             groupRepository.save(group);
-            studentRepository.save(student);
         }
     }
 

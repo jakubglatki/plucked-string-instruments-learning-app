@@ -34,13 +34,4 @@ public class StudentController  {
     }
 
 
-    public void addGrade(Grade grade, Student student){
-        ArrayList<Grade> gradesList=new ArrayList<>();
-        if(student.getGrades()!=null)
-            gradesList=student.getGrades();
-
-        gradesList.add(grade);
-
-        student.setGrades(gradesList);
-    }
 }

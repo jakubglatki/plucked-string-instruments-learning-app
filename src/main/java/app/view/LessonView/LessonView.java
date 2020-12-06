@@ -15,15 +15,15 @@ import app.view.MainView;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.swing.*;
 
 @Route(value = "lesson", layout = InternalLayout.class)
 @CssImport("./styles/shared-styles.css")
@@ -41,6 +41,8 @@ public class LessonView extends VerticalLayout {
     private TextField topicField;
     private HorizontalLayout fieldLayout;
     private Button changeLessonStatusButton;
+    private Button addGradesButton;
+    private Dialog addGradesDialog;
 
     public LessonView(){
     }
@@ -57,12 +59,14 @@ public class LessonView extends VerticalLayout {
             if(user.getUserType()==UserType.STUDENT && lesson.getIsActive()==true)
                 setStudentAsPresent();
             add(fieldLayout);
+            setTabsLayout();
+            setAddGradesButton();
         }
         catch (Exception e){
             UI.getCurrent().navigate(MainView.class);
         }
-        setTabsLayout();
     }
+
 
     private void setStudentAsPresent() {
         LessonPresence lessonPresence=lesson.getStudentsLessonPresences((Student)user);
@@ -110,5 +114,20 @@ public class LessonView extends VerticalLayout {
         tabsLayout.setWidth("98%");
         tabsLayout.setHeight("450px");
         add(tabsLayout);
+    }
+
+
+    private void setAddGradesButton() {
+        if(user.getUserType()==UserType.TEACHER)
+        addGradesButton=new Button(LABEL_NAMES.ADD_GRADES);
+        addGradesButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        addGradesDialog=new Dialog();
+        addGradesDialog.setWidth("1100px");
+        addGradesButton.addClickListener(e->{
+            AddGradeToAllView addGradeToAllView=new AddGradeToAllView(group,lesson,groupRepository,addGradesDialog);
+            addGradesDialog.add(addGradeToAllView);
+            addGradesDialog.open();
+        });
+        add(addGradesButton);
     }
 }

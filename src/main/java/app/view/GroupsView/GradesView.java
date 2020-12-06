@@ -5,7 +5,6 @@ import app.controller.GroupController;
 import app.model.Group.Group;
 import app.model.Group.GroupRepository;
 import app.model.User.Grade.Grade;
-import app.model.User.Grade.GradeRepository;
 import app.model.User.Student.Student;
 import app.model.User.Student.StudentRepository;
 import app.model.User.Teacher.Teacher;
@@ -16,14 +15,12 @@ import com.vaadin.flow.component.grid.editor.Editor;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextArea;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.IntegerRangeValidator;
 import com.vaadin.flow.data.validator.StringLengthValidator;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Optional;
 import java.util.WeakHashMap;
 
 
