@@ -7,6 +7,7 @@ import app.model.Group.Group;
 import app.model.Group.GroupRepository;
 import app.model.Instrument.Instrument;
 import app.model.Instrument.InstrumentRepository;
+import app.model.Instrument.InstrumentString;
 import app.model.User.Grade.Grade;
 import app.model.User.Student.Student;
 import app.model.User.Student.StudentRepository;
@@ -20,10 +21,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.ArrayList;
+import java.util.*;
 
 @Component
 public class DBSeeder implements CommandLineRunner {
@@ -45,7 +43,8 @@ public class DBSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... strings) throws Exception {
-        User elo = new User("No", "elo", "xd@xd.com", "da", UserType.STUDENT);
+*/
+/*        User elo = new User("No", "elo", "xd@xd.com", "da", UserType.STUDENT);
 
 
         User noelo = new User("No1", "elo1", "xd@xd.com1", "da1", UserType.STUDENT);
@@ -59,8 +58,17 @@ public class DBSeeder implements CommandLineRunner {
 
         ArrayList<Teacher> teacher = teacherRepository.findByFirstName("Jurgen");
         ArrayList<Student> students = studentRepository.findByLastName("Henderson");
-        students.add(studentRepository.findByLastName("Keita").get(0));
-        students.add(studentRepository.findByLastName("Milner").get(0));
+*//*
+*/
+/*        students.add(studentRepository.findByLastName("Keita").get(0));
+        students.add(studentRepository.findByLastName("Milner").get(0));*//*
+*/
+/*
+
+
+    }
+}*//*
+
 */
 /*
 
@@ -92,14 +100,38 @@ public class DBSeeder implements CommandLineRunner {
         System.out.println(groupRepository.findByStudentsMailContaining("mo@salah.com").get(0).getName());*//*
 
 
-        Instrument ukulele=new Instrument("Ukulele");
-        Instrument guitar= new Instrument("Guitar");
-        instrumentRepository.save(guitar);
-        instrumentRepository.save(ukulele);
-    }
-}
 
 */
+/*        Instrument ukulele=new Instrument("Ukulele");
+        Instrument guitar= new Instrument("Guitar");
+        InstrumentString string1= new InstrumentString();
+        InstrumentString string2= new InstrumentString();
+        InstrumentString string3= new InstrumentString();
+        InstrumentString string4= new InstrumentString();
+        InstrumentString string5= new InstrumentString();
+        InstrumentString string6= new InstrumentString();
+        ArrayList<InstrumentString> stringss= new ArrayList<InstrumentString>(Arrays.asList(string1,string2,string3,string4));
+        ukulele.setStrings(stringss);
+
+ *//*
+
+        Group group=groupRepository.findAll().get(0);*/
+/*
+        group.setInstrument(ukulele);
+        groupRepository.save(group);
+        stringss.add(string5);
+        stringss.add(string6);
+        guitar.setStrings(stringss);
+        instrumentRepository.save(guitar);*//*
+
+        Instrument ukulele=instrumentRepository.findAll().get(0);
+        group.setInstrument(ukulele);
+        groupRepository.save(group);
+    }
+}
+*/
+
+
 
 
 

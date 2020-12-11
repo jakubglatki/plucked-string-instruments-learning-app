@@ -109,11 +109,8 @@ public class LessonView extends VerticalLayout {
     }
 
     private void setTabsLayout() {
-        tabsLayout=new HorizontalLayout();
-        tabsLayout.addClassName("group-grid");
-        tabsLayout.setWidth("98%");
-        tabsLayout.setHeight("450px");
-        add(tabsLayout);
+        TabsView tabsView=new TabsView(groupRepository,group);
+        add(tabsView);
     }
 
 
