@@ -6,6 +6,25 @@
     padding: 20px;
 }
 
+.chord-grid{
+    border-width: 3px;
+    border-color: saddlebrown;
+    border-style: ridge;
+    width: 98vw;
+    height: min-content;
+    padding-left: 2vw;
+    padding-right: 1vw;
+}
+
 .background{
     background-color: saddlebrown;
+}
+
+.chord-text-field {
+    border-width: 0px;
+    height: 30px;
+    width: 2.8vw;
+    background-color: transparent;
+    padding: 0.05vw;
+
 }

@@ -109,7 +109,7 @@ public class LessonView extends VerticalLayout {
     }
 
     private void setTabsLayout() {
-        TabsView tabsView=new TabsView(groupRepository,group);
+        TabsView tabsView=new TabsView(groupRepository,group,user);
         add(tabsView);
     }
 
