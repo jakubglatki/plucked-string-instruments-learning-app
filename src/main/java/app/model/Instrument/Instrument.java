@@ -1,9 +1,9 @@
 package app.model.Instrument;
 
-import app.model.Chord.Chord;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "Instruments")
@@ -11,6 +11,7 @@ public class Instrument {
     @Id
     private String Id;
     private String name;
+    private ArrayList<InstrumentString> strings;
     private List<Chord> chords;
 
     public Instrument(){}
@@ -33,5 +34,13 @@ public class Instrument {
 
     public void setChords(List<Chord> chords) {
         this.chords = chords;
+    }
+
+    public ArrayList<InstrumentString> getStrings() {
+        return strings;
+    }
+
+    public void setStrings(ArrayList<InstrumentString> strings) {
+        this.strings = strings;
     }
 }
