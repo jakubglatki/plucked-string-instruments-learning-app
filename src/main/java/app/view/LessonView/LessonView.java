@@ -21,6 +21,7 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,10 +61,12 @@ public class LessonView extends VerticalLayout {
                 setStudentAsPresent();
             add(fieldLayout);
             setTabsLayout();
-            setAddGradesButton();
+            if(user.getUserType()==UserType.TEACHER)
+                setAddGradesButton();
         }
         catch (Exception e){
-            UI.getCurrent().navigate(MainView.class);
+            System.out.println(e);
+           // UI.getCurrent().navigate(MainView.class);
         }
     }
 
@@ -109,7 +112,7 @@ public class LessonView extends VerticalLayout {
     }
 
     private void setTabsLayout() {
-        TabsView tabsView=new TabsView(groupRepository,group,user);
+        TabsView tabsView=new TabsView(groupRepository,group,lesson, user);
         add(tabsView);
     }
 

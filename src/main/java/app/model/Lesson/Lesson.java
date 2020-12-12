@@ -23,6 +23,8 @@ public class Lesson implements Comparable<Lesson>{
     private boolean isActive;
     private Instrument instrument;
 
+    private int nbOfLines=2;
+
     public Lesson(){}
 
     public Lesson(Group group, String topic, LocalDateTime classDate){
@@ -89,6 +91,16 @@ public class Lesson implements Comparable<Lesson>{
     public void setInstrument(Instrument instrument) {
         this.instrument = instrument;
     }
+
+
+    public int getNbOfLines() {
+        return nbOfLines;
+    }
+
+    public void setNbOfLines(int nbOfLines) {
+        this.nbOfLines = nbOfLines;
+    }
+
 
     @Override
     public int compareTo(Lesson o) {

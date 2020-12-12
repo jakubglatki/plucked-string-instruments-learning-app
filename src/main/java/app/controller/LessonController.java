@@ -23,7 +23,7 @@ public class LessonController {
         return group;
     }
 
-    public int getLessonIndex(Group group, Lesson lesson){
+    public static int getLessonIndex(Group group, Lesson lesson){
 
         ArrayList<Lesson> lessons= new ArrayList<>();
         lessons=group.getLessons();
