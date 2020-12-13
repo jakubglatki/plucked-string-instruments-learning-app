@@ -1,5 +1,6 @@
 package app.model.Lesson;
 
+import app.controller.LessonController;
 import app.model.Group.Group;
 import app.model.Instrument.Instrument;
 import app.model.User.Student.Student;
@@ -34,6 +35,7 @@ public class Lesson implements Comparable<Lesson>{
         this.instrument=group.getInstrument();
         lessonPresences=new ArrayList<>();
         setLessonPresences(group);
+        this.instrument= LessonController.setLessonsInstrumentFields(this);
     }
 
     private void setLessonPresences(Group group) {

@@ -1,11 +1,10 @@
 package app.view.LessonView;
 
 import app.controller.LessonController;
+import app.model.Group.Group;
 import app.model.Group.GroupRepository;
 import app.model.Instrument.Instrument;
-import app.model.Group.Group;
 import app.model.Lesson.Lesson;
-import app.model.Lesson.LessonRepository;
 import app.model.User.User;
 import app.model.User.UserType;
 import com.vaadin.flow.component.button.Button;
@@ -17,14 +16,11 @@ import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.router.PreserveOnRefresh;
-import com.vaadin.flow.server.VaadinSession;
 
 import java.util.List;
 import java.util.stream.Stream;
 
 @CssImport("./styles/shared-styles.css")
-@PreserveOnRefresh
 public class TabsView extends VerticalLayout {
 
     private GroupRepository groupRepository;
@@ -45,7 +41,8 @@ public class TabsView extends VerticalLayout {
         this.user=user;
         this.group=group;
         this.lesson=lesson;
-        setButtonsBar();
+        if (user.getUserType() == UserType.TEACHER)
+            setButtonsBar();
         setTabsLayout();
         if (user.getUserType() == UserType.TEACHER) {
             setAddLineButton();
@@ -77,11 +74,11 @@ public class TabsView extends VerticalLayout {
     private void setInstrumentsStrings() {
         lastTabsLine=lesson.getNbOfLines();
         for (int k = 0; k < lastTabsLine; k++) {
-            addNewStringsLine();
+            addNewStringsLine(k);
         }
     }
 
-    private void addNewStringsLine(){
+    private void addNewStringsLine(int line){
         int nbOfStrings = instrument.getStrings().size();
         HorizontalLayout lineTabsLayout= new HorizontalLayout();
         lineTabsLayout.setPadding(false);
@@ -93,7 +90,9 @@ public class TabsView extends VerticalLayout {
             for (int j = 0; j < nbOfStrings; j++) {
                 TextField textField = new TextField();
                 textField.setReadOnly(true);
-                textField.setValue("-");
+                textField.setValue(lesson.getInstrument().getStrings().get(j).getValue().get(i+(line*30)));
+                if(user.getUserType()==UserType.TEACHER)
+                    setTextFieldForTeacher(textField, j, i+(line*30));
                 textField.addClassName("chord-text-field");
                 stringLayout.add(textField);
             }
@@ -102,13 +101,26 @@ public class TabsView extends VerticalLayout {
         tabsLayout.add(lineTabsLayout);
     }
 
+    private void setTextFieldForTeacher(TextField textField, int stringNb, int placeNb) {
+        textField.setReadOnly(false);
+        textField.addValueChangeListener(e->{
+           lesson.getInstrument().getStrings().get(stringNb).getValue().set(placeNb,e.getValue());
+           groupRepository.save(group);
+        });
+    }
+
 
     private void setAddLineButton() {
         addLineButton=new Button(new Icon(VaadinIcon.PLUS));
         addLineButton.addClickListener(e->{
-            addNewStringsLine();
-            lastTabsLine++;
+            for(int i=30*lastTabsLine;i<30*lastTabsLine+30;i++){
+                for(int j=0;j<instrument.getStrings().size();j++)
+                    lesson.getInstrument().getStrings().get(j).getValue().add(i,"-");
+            }
+            groupRepository.save(group);
             changeNbOfLinesInDB();
+            addNewStringsLine(lastTabsLine);
+            lastTabsLine++;
         });
         buttonsLayout=new HorizontalLayout(addLineButton);
         this.add(buttonsLayout);
@@ -132,6 +144,5 @@ public class TabsView extends VerticalLayout {
         group.getLessons().remove(index);
         group.getLessons().add(index,lesson);
         groupRepository.save(group);
-
     }
 }

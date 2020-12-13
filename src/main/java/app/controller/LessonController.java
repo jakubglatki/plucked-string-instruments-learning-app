@@ -1,6 +1,8 @@
 package app.controller;
 
 import app.model.Group.Group;
+import app.model.Instrument.Instrument;
+import app.model.Instrument.InstrumentString;
 import app.model.Lesson.Lesson;
 import app.model.Lesson.LessonPresence;
 import app.model.User.Student.Student;
@@ -54,4 +56,22 @@ public class LessonController {
         }
         return index;
     }
+
+    public static Instrument setLessonsInstrumentFields(Lesson lesson){
+        Instrument instrument=lesson.getInstrument();
+        ArrayList<String> strings=new ArrayList<>();
+        for(int i=0;i<60;i++){
+            strings.add(i,"-");
+        }
+        InstrumentString instrumentString=new InstrumentString();
+        instrumentString.setValue(strings);
+        ArrayList<InstrumentString> arrayList=new ArrayList<>();
+        for(int j=0;j<instrument.getStrings().size();j++){
+            arrayList.add(j,instrumentString);
+        }
+        instrument.setStrings(arrayList);
+        return instrument;
+    }
+
+
 }
