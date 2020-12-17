@@ -8,11 +8,13 @@ import java.util.List;
 
 @Document(collection = "Instruments")
 public class Instrument {
+
     @Id
-    private String Id;
+    private String id;
     private String name;
     private ArrayList<InstrumentString> strings;
     private List<Chord> chords;
+    private ArrayList<String> stringLayoutClass;
 
     public Instrument(){}
 
@@ -42,5 +44,13 @@ public class Instrument {
 
     public void setStrings(ArrayList<InstrumentString> strings) {
         this.strings = strings;
+    }
+
+    public ArrayList<String> getStringLayoutClass() {
+        return stringLayoutClass;
+    }
+
+    public void setStringLayoutClass(ArrayList<String> stringLayoutClass) {
+        this.stringLayoutClass = stringLayoutClass;
     }
 }

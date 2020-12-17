@@ -26,5 +26,25 @@
     width: 2.8vw;
     background-color: transparent;
     padding: 0.05vw;
+}
 
+.chosen-string-layout{
+    background: lightskyblue;
+}
+
+.not-chosen-string-layout{
+    background: none;
+}
+
+.icon{
+    size:2vw;
+}
+
+.choose-string-line-button{
+    height: 15px;
+    width: 10px;
+    background-size: 10px;
+    padding-right: 10px;
+    color: darkslateblue;
+    background-color: darkblue;
 }

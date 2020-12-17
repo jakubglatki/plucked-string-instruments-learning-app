@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface InstrumentRepository extends MongoRepository<Instrument, String> {
     public Instrument findByName(String name);
+    public Chord findByChordsName(String name);
 }

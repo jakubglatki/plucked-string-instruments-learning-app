@@ -1,13 +1,15 @@
-/*
 
 
 package app;
 
+import app.controller.ChordController;
 import app.model.Group.Group;
 import app.model.Group.GroupRepository;
+import app.model.Instrument.Chord;
 import app.model.Instrument.Instrument;
 import app.model.Instrument.InstrumentRepository;
 import app.model.Instrument.InstrumentString;
+import app.model.Lesson.Lesson;
 import app.model.User.Grade.Grade;
 import app.model.User.Student.Student;
 import app.model.User.Student.StudentRepository;
@@ -31,20 +33,19 @@ public class DBSeeder implements CommandLineRunner {
 
     @Autowired
     private TeacherRepository teacherRepository;
-
-    @Autowired
     private InstrumentRepository instrumentRepository;
 
-    public DBSeeder(UserRepository UserRepository, StudentRepository studentRepository, GroupRepository groupRepository) {
+    public DBSeeder(UserRepository UserRepository, StudentRepository studentRepository, GroupRepository groupRepository, InstrumentRepository instrumentRepository) {
         this.UserRepository = UserRepository;
         this.studentRepository = studentRepository;
         this.groupRepository = groupRepository;
+        this.instrumentRepository=instrumentRepository;
     }
 
     @Override
     public void run(String... strings) throws Exception {
-*/
-/*        User elo = new User("No", "elo", "xd@xd.com", "da", UserType.STUDENT);
+/*
+        User elo = new User("No", "elo", "xd@xd.com", "da", UserType.STUDENT);
 
 
         User noelo = new User("No1", "elo1", "xd@xd.com1", "da1", UserType.STUDENT);
@@ -58,18 +59,45 @@ public class DBSeeder implements CommandLineRunner {
 
         ArrayList<Teacher> teacher = teacherRepository.findByFirstName("Jurgen");
         ArrayList<Student> students = studentRepository.findByLastName("Henderson");
-*//*
-*/
-/*        students.add(studentRepository.findByLastName("Keita").get(0));
-        students.add(studentRepository.findByLastName("Milner").get(0));*//*
-*/
-/*
 
+        students.add(studentRepository.findByLastName("Keita").get(0));
+        students.add(studentRepository.findByLastName("Milner").get(0));
+*/
+        Instrument guitar=instrumentRepository.findByName("Gitara");
+/*        Chord c=new Chord();
+        c= ChordController.setGuitarChord("C", "0","1","0","2","3","-");
+        Chord cm=new Chord();
+        cm= ChordController.setGuitarChord("Cm", "3","4","5","5","-","-");
+        Chord c7=new Chord();
+        c7= ChordController.setGuitarChord("C7", "0","1","3","2","3","-");
+
+        ArrayList<Chord> chords=new ArrayList<>(List.of(c,cm,c7));
+        guitar.setChords(chords);
+        try {
+            Chord xd=instrumentRepository.findByChordsName("C");
+            System.out.println(xd.toString());
+        }
+        catch (Exception e) {System.out.println(e);}*/
+
+/*        Group group=groupRepository.findAll().get(0);
+        Instrument instrument=group.getLessons().get(0).getInstrument();
+        ArrayList<String> instrumetsClassName=new ArrayList<>();
+
+        for(int i=119;i>59;i--){
+            instrument.getStringLayoutClass().remove(i);
+        }
+
+*//*        instrument.setStringLayoutClass(instrumetsClassName);
+        group.getLessons().get(0).setInstrument(instrument);
+
+
+        instrument.setChords(guitar.getChords());
+        group.setInstrument(instrument);*//*
+        groupRepository.save(group);*/
 
     }
-}*//*
+}
 
-*/
 /*
 
         ArrayList<Student> students = studentRepository.findByLastName("Salah");
@@ -97,12 +125,11 @@ public class DBSeeder implements CommandLineRunner {
         }
         catch (Exception e){System.out.println(e.toString());}
 
-        System.out.println(groupRepository.findByStudentsMailContaining("mo@salah.com").get(0).getName());*//*
+        System.out.println(groupRepository.findByStudentsMailContaining("mo@salah.com").get(0).getName());
 
 
 
-*/
-/*        Instrument ukulele=new Instrument("Ukulele");
+        Instrument ukulele=new Instrument("Ukulele");
         Instrument guitar= new Instrument("Guitar");
         InstrumentString string1= new InstrumentString();
         InstrumentString string2= new InstrumentString();
@@ -113,16 +140,15 @@ public class DBSeeder implements CommandLineRunner {
         ArrayList<InstrumentString> stringss= new ArrayList<InstrumentString>(Arrays.asList(string1,string2,string3,string4));
         ukulele.setStrings(stringss);
 
- *//*
 
-        Group group=groupRepository.findAll().get(0);*/
-/*
+
+        Group group=groupRepository.findAll().get(0);
         group.setInstrument(ukulele);
         groupRepository.save(group);
         stringss.add(string5);
         stringss.add(string6);
         guitar.setStrings(stringss);
-        instrumentRepository.save(guitar);*//*
+        instrumentRepository.save(guitar);
 
         Instrument ukulele=instrumentRepository.findAll().get(0);
         group.setInstrument(ukulele);
