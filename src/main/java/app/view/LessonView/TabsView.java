@@ -3,12 +3,15 @@ package app.view.LessonView;
 import app.controller.LessonController;
 import app.model.Group.Group;
 import app.model.Group.GroupRepository;
+import app.model.Instrument.Chord;
 import app.model.Instrument.Instrument;
+import app.model.Instrument.InstrumentRepository;
 import app.model.Lesson.Lesson;
 import app.model.User.User;
 import app.model.User.UserType;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
+import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -17,6 +20,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -25,8 +29,8 @@ import java.util.stream.Stream;
 public class TabsView extends VerticalLayout {
 
     private GroupRepository groupRepository;
-    private Group group;
-    private Lesson lesson;
+    protected Group group;
+    protected Lesson lesson;
     private int lastTabsLine;
     private Instrument instrument;
     private VerticalLayout tabsLayout;
@@ -35,16 +39,22 @@ public class TabsView extends VerticalLayout {
     private Button removeLineButton;
     private HorizontalLayout buttonsLayout;
     private User user;
-    private ArrayList<VerticalLayout> stringLayouts;
+    protected ArrayList<VerticalLayout> stringLayouts;
 
-    public TabsView(GroupRepository groupRepository, Group group, Lesson lesson, User user){
+    public TabsView(GroupRepository groupRepository,  Group group, Lesson lesson, User user){
         this.instrument=group.getInstrument();
         this.groupRepository=groupRepository;
         this.user=user;
         this.group=group;
         this.lesson=lesson;
-        if (user.getUserType() == UserType.TEACHER)
-            setButtonsBar();
+        stringLayouts=new ArrayList<>();
+        if (user.getUserType() == UserType.TEACHER) {
+            buttonsBar=new MenuBar();
+            buttonsBar.setOpenOnHover(true);
+            Stream.of("C","D","E","F","G","A","B")
+                    .forEach(this::setButtonsBar);
+            add(buttonsBar);
+        }
         setTabsLayout();
         if (user.getUserType() == UserType.TEACHER) {
             setAddLineButton();
@@ -53,19 +63,38 @@ public class TabsView extends VerticalLayout {
     }
 
 
-    private void setButtonsBar() {
-        buttonsBar=new MenuBar();
-        Stream.of("C","D","E","F","G","A","B")
-                .forEach(s->{
-                    buttonsBar.addItem(s);
-                });
-        buttonsBar.setOpenOnHover(true);
-        List<MenuItem> menuItems=buttonsBar.getItems();
-        for(MenuItem menuItem: menuItems) {
-            menuItem.getSubMenu().addItem(menuItem.getText() + "m");
-            menuItem.getSubMenu().addItem(menuItem.getText() + "7");
-        }
-        add(buttonsBar);
+    private void setButtonsBar(String chordName) {
+        Chord chord=group.getInstrument().getChords().stream().filter(ch -> ch.getName().equals(chordName)).findFirst().get();
+        MenuItem menuItem= buttonsBar.addItem(chord.getName());
+        SubMenu subMenuItem=menuItem.getSubMenu();
+        Chord chordM=group.getInstrument().getChords().stream().filter(ch -> ch.getName().equals(chordName+"m")).findFirst().get();
+        MenuItem itemM= subMenuItem.addItem(chordM.getName());
+        Chord chord7=group.getInstrument().getChords().stream().filter(ch -> ch.getName().equals(chordName+"7")).findFirst().get();
+        MenuItem item7= subMenuItem.addItem(chord7.getName());
+        addMenuItemsClickListeners(menuItem, chord);
+        addMenuItemsClickListeners(itemM, chordM);
+        addMenuItemsClickListeners(item7, chord7);
+    }
+
+    private void addMenuItemsClickListeners(MenuItem menuItem, Chord chord) {
+        menuItem.addClickListener(menuItemClickEvent -> {
+            for(VerticalLayout stringLayout:stringLayouts){
+                if(stringLayout.getClassName().equals("chosen-string-layout")){
+                    for(int i=0;i<instrument.getStrings().size();i++) {
+                        TextField textField= (TextField)stringLayout.getComponentAt(i+1);
+                        textField.setValue(chord.getStrings().get(i).getValue().get(0));
+                    }
+                    uncheckStringLayout(stringLayout);
+                }
+            }
+        });
+    }
+
+    private void uncheckStringLayout(VerticalLayout stringLayout) {
+        stringLayout.setClassName("not-chosen-string-layout");
+        int index= stringLayouts.indexOf(stringLayout);
+        lesson.getInstrument().getStringLayoutClass().set(index,"not-chosen-string-layout");
+        groupRepository.save(group);
     }
 
     private void setTabsLayout() {
@@ -87,10 +116,9 @@ public class TabsView extends VerticalLayout {
         HorizontalLayout lineTabsLayout= new HorizontalLayout();
         lineTabsLayout.setPadding(false);
         lineTabsLayout.setSpacing(false);
-        stringLayouts=new ArrayList<>();
         for (int i = 0; i < 30; i++) {
             VerticalLayout stringLayout= new VerticalLayout();
-            stringLayout= setStringLayout(stringLayout, i, line);
+            setStringLayout(stringLayout, i, line);
             setIcons(i, line, stringLayout);
             for (int j = 0; j < nbOfStrings; j++) {
                 setTextFields(i,j, line, stringLayout);
@@ -100,13 +128,12 @@ public class TabsView extends VerticalLayout {
         tabsLayout.add(lineTabsLayout);
     }
 
-    private VerticalLayout setStringLayout(VerticalLayout stringLayout, int i, int line) {
+    private void setStringLayout(VerticalLayout stringLayout, int i, int line) {
         stringLayout.setPadding(false);
         stringLayout.setSpacing(false);
         stringLayout.setId(String.valueOf(i+(line*30)));
         stringLayout.setClassName(lesson.getInstrument().getStringLayoutClass().get(i+(line*30)));
         stringLayouts.add(stringLayout);
-        return stringLayout;
     }
 
     private void setIcons(int i, int line, VerticalLayout stringLayout) {
@@ -115,17 +142,15 @@ public class TabsView extends VerticalLayout {
             icon.setClassName("icon");
             stringLayout.add(icon);
             stringLayout.setHorizontalComponentAlignment(Alignment.CENTER, icon);
-            icon.addClickListener(e -> {
-                System.out.println(icon.getParent().toString());
-                if (!stringLayout.getClassName().equals("chosen-string-layout"))
-                    setStringLayoutClassName("chosen-string-layout", stringLayout, i, line);
-                else
-                    setStringLayoutClassName("not-chosen-string-layout", stringLayout, i, line);
-
-                stringLayout.getChildren().forEach(textField ->
-                        System.out.println(textField.getId()));
-            });
+            icon.addClickListener(e -> setIconClickListener(i, line, stringLayout));
         }
+    }
+
+    private void setIconClickListener( int i, int line, VerticalLayout stringLayout) {
+        if (!stringLayout.getClassName().equals("chosen-string-layout"))
+            setStringLayoutClassName("chosen-string-layout", stringLayout, i, line);
+        else
+            setStringLayoutClassName("not-chosen-string-layout", stringLayout, i, line);
     }
 
     private void setStringLayoutClassName(String s, VerticalLayout stringLayout, int i, int line) {
@@ -135,9 +160,7 @@ public class TabsView extends VerticalLayout {
     }
 
     private void setTextFields(int i, int j, int line, VerticalLayout stringLayout) {
-        String name="textField"+(i+(line*30));
         TextField textField = new TextField();
-        textField.setId(name);
         textField.setReadOnly(true);
         textField.setValue(lesson.getInstrument().getStrings().get(j).getValue().get(i+(line*30)));
         if(user.getUserType()==UserType.TEACHER)
@@ -179,8 +202,10 @@ public class TabsView extends VerticalLayout {
             if(this.lastTabsLine>1){
                     for(int i=30*(lastTabsLine)-1;i>30*(lastTabsLine)-31;i--) {
                         lesson.getInstrument().getStringLayoutClass().remove(i);
-                        for (int j = 0; j < instrument.getStrings().size(); j++)
+                        for (int j = 0; j < instrument.getStrings().size(); j++) {
                             lesson.getInstrument().getStrings().get(j).getValue().remove(i);
+                            stringLayouts.remove(i);
+                        }
                     }
                 tabsLayout.remove(tabsLayout.getComponentAt(lastTabsLine-1));
                 lastTabsLine--;

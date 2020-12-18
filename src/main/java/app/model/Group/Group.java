@@ -8,8 +8,6 @@ import app.model.User.User;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.ArrayList;
 
 
@@ -43,6 +41,7 @@ public class Group {
     public Group(String name, Instrument instrument, Teacher teacher, ArrayList<Student> students){
         this(name,instrument,teacher);
         this.students=students;
+        this.lessons= new ArrayList<>();
     }
 
     public Group(String name, Instrument instrument, User teacher, ArrayList<Student> students, ArrayList<Lesson> lessons) {

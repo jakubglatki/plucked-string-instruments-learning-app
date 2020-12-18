@@ -3,6 +3,7 @@ package app.view.LessonView;
 import app.LABEL_NAMES;
 import app.controller.LessonController;
 import app.model.Group.GroupRepository;
+import app.model.Instrument.InstrumentRepository;
 import app.model.Lesson.Lesson;
 import app.model.Lesson.LessonPresence;
 import app.model.User.Student.Student;
@@ -10,6 +11,7 @@ import app.model.User.User;
 import app.model.Group.Group;
 import app.model.User.UserRepository;
 import app.model.User.UserType;
+import app.view.GroupsView.GroupView;
 import app.view.Layout.InternalLayout;
 import app.view.MainView;
 import com.vaadin.flow.component.AttachEvent;
@@ -35,6 +37,7 @@ public class LessonView extends VerticalLayout {
     @Autowired
     private GroupRepository groupRepository;
 
+
     private Lesson lesson;
     private User user;
     private Group group;
@@ -57,7 +60,7 @@ public class LessonView extends VerticalLayout {
             lesson= (Lesson)UI.getCurrent().getSession().getAttribute("lesson");
             group=(Group)UI.getCurrent().getSession().getAttribute("group");
             setTopicField();
-            if(user.getUserType()==UserType.STUDENT && lesson.getIsActive()==true)
+            if(user.getUserType()==UserType.STUDENT && lesson.getIsActive())
                 setStudentAsPresent();
             add(fieldLayout);
             setTabsLayout();
@@ -65,8 +68,7 @@ public class LessonView extends VerticalLayout {
                 setAddGradesButton();
         }
         catch (Exception e){
-            System.out.println(e);
-           // UI.getCurrent().navigate(MainView.class);
+           UI.getCurrent().navigate(GroupView.class);
         }
     }
 
@@ -91,7 +93,7 @@ public class LessonView extends VerticalLayout {
 
     private void setStartEndLessonButtons() {
         changeLessonStatusButton=new Button();
-        if(lesson.getIsActive()==true)
+        if(lesson.getIsActive())
             changeLessonStatusButton.setText(LABEL_NAMES.END_LESSON);
         else
             changeLessonStatusButton.setText(LABEL_NAMES.START_LESSON);
@@ -112,7 +114,7 @@ public class LessonView extends VerticalLayout {
     }
 
     private void setTabsLayout() {
-        TabsView tabsView=new TabsView(groupRepository,group,lesson, user);
+        TabsView tabsView=new TabsView(groupRepository, group,lesson, user);
         add(tabsView);
     }
 
@@ -124,6 +126,7 @@ public class LessonView extends VerticalLayout {
         addGradesDialog=new Dialog();
         addGradesDialog.setWidth("1100px");
         addGradesButton.addClickListener(e->{
+            addGradesDialog.removeAll();
             AddGradeToAllView addGradeToAllView=new AddGradeToAllView(group,lesson,groupRepository,addGradesDialog);
             addGradesDialog.add(addGradeToAllView);
             addGradesDialog.open();

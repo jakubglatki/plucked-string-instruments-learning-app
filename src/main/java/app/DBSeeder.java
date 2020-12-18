@@ -63,17 +63,64 @@ public class DBSeeder implements CommandLineRunner {
         students.add(studentRepository.findByLastName("Keita").get(0));
         students.add(studentRepository.findByLastName("Milner").get(0));
 */
-        Instrument guitar=instrumentRepository.findByName("Gitara");
-/*        Chord c=new Chord();
-        c= ChordController.setGuitarChord("C", "0","1","0","2","3","-");
-        Chord cm=new Chord();
-        cm= ChordController.setGuitarChord("Cm", "3","4","5","5","-","-");
-        Chord c7=new Chord();
-        c7= ChordController.setGuitarChord("C7", "0","1","3","2","3","-");
+        Instrument ukulele=instrumentRepository.findByName("Ukulele");
+        Chord C=new Chord();
+        C= ChordController.setUkuleleChord("C", "3","0","0","0");
+        Chord Cm=new Chord();
+        Cm= ChordController.setUkuleleChord("Cm", "3","3","3","0");
+        Chord C7=new Chord();
+        C7= ChordController.setUkuleleChord("C7", "1","0","0","0");
 
-        ArrayList<Chord> chords=new ArrayList<>(List.of(c,cm,c7));
-        guitar.setChords(chords);
-        try {
+        Chord D=new Chord();
+        D= ChordController.setUkuleleChord("D", "0","2","2","2");
+        Chord Dm=new Chord();
+        Dm= ChordController.setUkuleleChord("Dm", "0","1","2","2");
+        Chord D7=new Chord();
+        D7= ChordController.setUkuleleChord("D7", "3","2","2","2");
+
+        Chord E=new Chord();
+        E= ChordController.setUkuleleChord("E", "2","0","3","1");
+        Chord Em=new Chord();
+        Em= ChordController.setUkuleleChord("Em", "2","3","4","0");
+        Chord E7=new Chord();
+        E7= ChordController.setUkuleleChord("E7", "2","0","2","1");
+
+        Chord f=new Chord();
+        f= ChordController.setUkuleleChord("F", "0","1","0","2");
+        Chord fm=new Chord();
+        fm= ChordController.setUkuleleChord("Fm", "3","1","0","1");
+        Chord f7=new Chord();
+        f7= ChordController.setUkuleleChord("F7", "3","1","3","2");
+
+        Chord g=new Chord();
+        g= ChordController.setUkuleleChord("G", "2","3","2","0");
+        Chord gm=new Chord();
+        gm= ChordController.setUkuleleChord("Gm", "1","3","2","0");
+        Chord g7=new Chord();
+        g7= ChordController.setUkuleleChord("G7", "2","1","2","0");
+
+        Chord A=new Chord();
+        A= ChordController.setUkuleleChord("A", "0","0","1","2");
+        Chord Am=new Chord();
+        Am= ChordController.setUkuleleChord("Am", "0","0","0","2");
+        Chord A7=new Chord();
+        A7= ChordController.setUkuleleChord("A7", "0","0","1","0");
+
+        Chord B=new Chord();
+        B= ChordController.setUkuleleChord("B", "2","2","3","4");
+        Chord Bm=new Chord();
+        Bm= ChordController.setUkuleleChord("Bm", "2","2","2","4");
+        Chord B7=new Chord();
+        B7= ChordController.setUkuleleChord("B7", "2","2","3","2");
+
+
+        List<Chord> chords=List.of(C,Cm,C7,D,Dm,D7,E,Em,E7, f,fm,f7,g,gm,g7,A,Am,A7,B,Bm,B7);
+        ukulele.setChords(chords);
+
+        instrumentRepository.save(ukulele);
+
+
+/*        try {
             Chord xd=instrumentRepository.findByChordsName("C");
             System.out.println(xd.toString());
         }

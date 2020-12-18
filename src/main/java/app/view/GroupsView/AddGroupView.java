@@ -4,6 +4,7 @@ import app.model.Group.Group;
 import app.model.Group.GroupRepository;
 import app.model.Instrument.Instrument;
 import app.model.Instrument.InstrumentRepository;
+import app.model.Lesson.Lesson;
 import app.model.User.Grade.Grade;
 import app.model.User.Student.Student;
 import app.model.User.Student.StudentRepository;

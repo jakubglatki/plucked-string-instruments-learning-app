@@ -60,8 +60,10 @@ public class LessonController {
     public static Instrument setLessonsInstrumentFields(Lesson lesson){
         Instrument instrument=lesson.getInstrument();
         ArrayList<String> strings=new ArrayList<>();
+        ArrayList<String> classNameList=new ArrayList<>();
         for(int i=0;i<60;i++){
             strings.add(i,"-");
+            classNameList.add("not-chosen-string-layout");
         }
         InstrumentString instrumentString=new InstrumentString();
         instrumentString.setValue(strings);
@@ -70,6 +72,7 @@ public class LessonController {
             arrayList.add(j,instrumentString);
         }
         instrument.setStrings(arrayList);
+        instrument.setStringLayoutClass(classNameList);
         return instrument;
     }
 

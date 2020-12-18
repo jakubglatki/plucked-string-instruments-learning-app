@@ -79,8 +79,8 @@ public class GroupView extends VerticalLayout {
             this.add(allGroupsLayout);
             setTeachersButtons();
         }
-        catch (Exception e){}
-    }
+        catch (Exception e){System.out.println(e);}
+}
 
     private  void setTeachersButtons(){
         if(user.getUserType()==UserType.TEACHER) {
@@ -107,8 +107,10 @@ public class GroupView extends VerticalLayout {
             }
         }
         catch (Exception e){
-            infoLabel.setText("Zaloguj się, aby uzyskać dostęp do swoich grup");}
-    }
+            infoLabel.setText("Zaloguj się, aby uzyskać dostęp do swoich grup");
+        System.out.println(e);}
+}
+
 
     private void setButton(Button button, Dialog dialog) {
         button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -183,7 +185,7 @@ public class GroupView extends VerticalLayout {
         TextField teacher=new TextField("Nauczyciel");
         teacher.setValue(group.getTeacher().getFirstName()+" "+group.getTeacher().getLastName());
         DateTimePicker datePicker= new DateTimePicker();
-        if(group.getLessons()!=null)
+        if(!group.getLessons().isEmpty())
            datePicker.setValue(group.getLessons().get(0).getClassDate());
         datePicker.setLabel("Najbliższa lekcja");
         teacher.setReadOnly(true);

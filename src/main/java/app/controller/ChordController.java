@@ -41,4 +41,30 @@ public class ChordController {
         chord.setStrings(instrumentStrings);
         return chord;
     }
+
+
+    public static Chord setUkuleleChord(String name, String s1, String s2, String s3, String s4){
+        Chord chord=new Chord();
+        chord.setName(name);
+        ArrayList<String> str1= new ArrayList<>(List.of(s1));
+        ArrayList<String> str2= new ArrayList<>(List.of(s2));
+        ArrayList<String> str3= new ArrayList<>(List.of(s3));
+        ArrayList<String> str4= new ArrayList<>(List.of(s4));
+
+        InstrumentString i1= new InstrumentString();
+        i1.setValue(str1);
+
+        InstrumentString i2= new InstrumentString();
+        i2.setValue(str2);
+
+        InstrumentString i3= new InstrumentString();
+        i3.setValue(str3);
+
+        InstrumentString i4= new InstrumentString();
+        i4.setValue(str4);
+
+        ArrayList<InstrumentString> instrumentStrings=new ArrayList<>(List.of(i1,i2,i3,i4));
+        chord.setStrings(instrumentStrings);
+        return chord;
+    }
 }

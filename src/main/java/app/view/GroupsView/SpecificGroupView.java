@@ -88,7 +88,7 @@ public class SpecificGroupView extends VerticalLayout {
 
     @Override
     public void onAttach(AttachEvent event){
-        try {
+       /* try {*/
             currentUser = userRepository.findByMail(VaadinSession.getCurrent().getAttribute("user").toString());
             group= (Group) VaadinSession.getCurrent().getAttribute("group");
             setTextFields();
@@ -108,8 +108,9 @@ public class SpecificGroupView extends VerticalLayout {
                 setEditLessonButton(LABEL_NAMES.DELETE_LESSON,false);
                 add(buttonLayout);
             }
-        }
-        catch (Exception e){infoLabel.setText("Zaloguj się, aby uzyskać dostęp do swoich grup");}
+/*        }
+        catch (Exception e){infoLabel.setText("Zaloguj się, aby uzyskać dostęp do swoich grup");
+        System.out.println(e);}*/
     }
 
 
